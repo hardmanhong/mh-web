@@ -1,0 +1,5 @@
+{
+  "presets": [
+    ["react-app", { "runtime": "automatic", "flow": false, "typescript": true }]
+  ]
+}

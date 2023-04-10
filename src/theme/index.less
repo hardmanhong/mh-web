@@ -1,0 +1,20 @@
+@import './dark.less';
+@import './light.less';
+
+body {
+  .u2-sider,
+  .ant-layout-sider-light .ant-layout-sider-trigger {
+    background: var(--bg);
+    color: var(--color);
+    .ant-form-item-label > label {
+      color: var(--color);
+    }
+  }
+}
+body .ant-layout {
+  background: none;
+}
+body .u2-layout {
+  background: var(--bg-layout);
+  color: var(--color);
+}
