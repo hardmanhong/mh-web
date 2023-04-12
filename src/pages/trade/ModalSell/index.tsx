@@ -3,7 +3,7 @@ import { Form, Input, InputNumber, Modal, Space } from 'antd'
 import { ZForm } from '@/components'
 import { IProps } from './types'
 
-const ModalEdit: React.FC<IProps> = ({ open, data, onCancel, onOk }) => {
+const ModalSell: React.FC<IProps> = ({ open, data, onCancel, onOk }) => {
   const [form] = Form.useForm()
   const handleOk = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     form.validateFields().then((values) => {
@@ -12,7 +12,7 @@ const ModalEdit: React.FC<IProps> = ({ open, data, onCancel, onOk }) => {
   }
   return (
     <Modal
-      title={data.id ? '编辑商品' : '创建商品'}
+      title={data.id ? '创建卖出记录' : '编辑卖出记录'}
       open={open}
       onCancel={onCancel}
       onOk={handleOk}
@@ -22,50 +22,50 @@ const ModalEdit: React.FC<IProps> = ({ open, data, onCancel, onOk }) => {
         initialValues={data}
         list={[
           {
-            props: {
-              name: 'name',
-              label: '名称',
-              rules: [
-                {
-                  required: true,
-                  message: '请输入名称'
-                }
-              ]
+            colProps: {
+              span: 24
             },
-            component: <Input />
-          },
-          {
             props: {
-              label: '参考价格',
-              required: true
+              label: '卖出',
+              required: true,
+              style: { marginBottom: 0 }
             },
             component: (
               <Space align='baseline'>
                 <Form.Item
-                  name='minPrice'
+                  name='sellPrice'
                   rules={[
                     {
                       required: true,
-                      message: '请填写价格'
+                      message: '请填写卖出价格'
                     }
                   ]}
                 >
-                  <InputNumber min={0} placeholder='低价' addonAfter='万' />
+                  <InputNumber min={0} placeholder='价格' addonAfter='万' />
                 </Form.Item>
-                <span>~</span>
                 <Form.Item
-                  name='maxPrice'
+                  name='sellQuantity'
                   rules={[
                     {
                       required: true,
-                      message: '请填写价格'
+                      message: '请填写卖出数量'
                     }
                   ]}
                 >
-                  <InputNumber min={0} placeholder='高价' addonAfter='万' />
+                  <InputNumber min={0} placeholder='数量' addonAfter='个' />
                 </Form.Item>
               </Space>
             )
+          },
+          {
+            colProps: {
+              span: 24
+            },
+            props: {
+              name: 'remark',
+              label: '备注'
+            },
+            component: <Input.TextArea placeholder='备注' />
           }
         ]}
       ></ZForm>
@@ -73,4 +73,4 @@ const ModalEdit: React.FC<IProps> = ({ open, data, onCancel, onOk }) => {
   )
 }
 
-export default ModalEdit
+export default ModalSell

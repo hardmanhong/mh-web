@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import {
   AccountBookOutlined,
   AppstoreOutlined,
@@ -26,7 +26,7 @@ const menus = [
   {
     name: '买卖',
     icon: <AccountBookOutlined />,
-    path: '/business'
+    path: '/trade'
   }
   // {
   //   name: 'test-list',
@@ -55,16 +55,18 @@ const U2Layout: React.FC<IProps> = () => {
   useEffect(() => {
     const selectedMenuKeys = getSelectedMenuKeys(location.pathname)
     const openMenuKeys = getOpenMenuKeys(selectedMenuKeys)
-    console.log('location.pathname', location.pathname)
-    console.log('selectedMenuKeys', selectedMenuKeys)
     setOpenKeys(openMenuKeys)
     setSelectedKeys(selectedMenuKeys)
   }, [location])
   const menuProps = {
-    menus,
+    items: menus.map((item) => ({
+      key: item.path,
+      icon: item.icon,
+      label: <Link to={item.path}>{item.name}</Link>
+    })),
     openKeys,
     selectedKeys,
-    setSelectedKeys
+    onOpenChange: setOpenKeys
   }
 
   return (

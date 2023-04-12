@@ -21,7 +21,7 @@ const U2Header: React.FC = () => {
         <div className='logo'>
           <a>
             <img src={logo} alt='logo' />
-            <h1>生意经</h1>
+            <h1>聚宝盆</h1>
           </a>
         </div>
         <div className='right'>

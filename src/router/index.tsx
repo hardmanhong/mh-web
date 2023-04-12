@@ -13,7 +13,7 @@ const Home = lazy(() => import('@/pages/home'))
 const TestList = lazy(() => import('@/pages/test/list'))
 const TestRecord = lazy(() => import('@/pages/test/record'))
 const TestDetail = lazy(() => import('@/pages/test/detail'))
-const Business = lazy(() => import('@/pages/business'))
+const Trade = lazy(() => import('@/pages/trade'))
 const Goods = lazy(() => import('@/pages/goods'))
 
 /**
@@ -89,8 +89,8 @@ const routerConfig: RouteObject[] = [
         element: LazyLoad(Home, 'home')
       },
       {
-        path: '/business',
-        element: LazyLoad(Business, 'business')
+        path: '/trade',
+        element: LazyLoad(Trade, 'trade')
       },
       {
         path: '/goods',

@@ -37,6 +37,7 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
+      title: '聚宝盆',
       template: paths.appHtml
     })
   ],

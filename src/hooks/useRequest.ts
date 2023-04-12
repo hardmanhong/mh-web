@@ -4,8 +4,9 @@ import { message } from 'antd'
 export type TUseRequest = (
   api: (params: any) => Promise<any>,
   options: {
-    params: any
+    params?: any
     manual?: boolean
+    defaultData?: any
     formatData?: (data: any) => any
   }
 ) => {
@@ -18,15 +19,20 @@ export type TUseRequest = (
 const useRequest: TUseRequest = (api, options) => {
   const [loading, setLoading] = useState(false)
   const [params, setParams] = useState(options.params)
-  const [data, setData] = useState()
+  const [data, setData] = useState(
+    typeof options?.formatData === 'function'
+      ? options.formatData(options.defaultData)
+      : options.defaultData
+  )
   const run = useCallback(
     (params?: any) => {
-      setParams({
+      const nextParams = {
         ...options.params,
         ...params
-      })
+      }
+      setParams(nextParams)
       setLoading(true)
-      return api(params)
+      return api(nextParams)
         .then((res) => {
           if (typeof options?.formatData === 'function') {
             setData(options.formatData(res))
@@ -36,7 +42,9 @@ const useRequest: TUseRequest = (api, options) => {
           return res
         })
         .catch((err) => {
-          message.error(err.msg)
+          if (typeof err.code === 'number' && err.message) {
+            message.error(err.message)
+          }
           return err
         })
         .finally(() => {

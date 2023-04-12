@@ -15,8 +15,7 @@ import { IProps } from './types'
 
 const business: React.FC<IProps> = () => {
   const [form] = Form.useForm()
-  const { tableProps, paginationProps, params, run, onSearch } =
-    usePaginated(getGoodsList)
+  const { tableProps, paginationProps, onSearch } = usePaginated(getGoodsList)
   const [modalEditProps, openModalEdit, closeModalEdit] = useModalPrpos<TGoods>(
     {
       name: '',

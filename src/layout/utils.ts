@@ -25,7 +25,6 @@ export const genMenuData = (routes: any[]) =>
 
 export const getPaths = (pathname: string) => {
   const pathSnippets = urlToList(pathname)
-  console.log('pathSnippets', pathSnippets)
   return pathSnippets
     .map((url) => {
       const currentItem = breadcrumbMap[url] || {}

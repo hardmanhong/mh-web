@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 export const computedScroll = (
   columns: {
     [key: string]: any
@@ -31,4 +33,38 @@ export const exportExcel = (name: string, data: Blob) => {
   document.body.appendChild(link)
   link.click()
   URL.revokeObjectURL(link.href)
+}
+
+export const formatDate = (date: string) => {
+  if (!date) return date
+  return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
+}
+interface IFormatField {
+  field: string
+  fields: [string, string]
+  format?: string
+}
+interface IHandleDateField {
+  (data: { [key: string]: any }, fields: IFormatField[]): { [key: string]: any }
+}
+export const formatDateFieldsQuery: IHandleDateField = (data, fields) => {
+  const values = { ...data }
+  fields.forEach((item) => {
+    const { field, fields, format = 'YYYY-MM-DD' } = item
+    const [startField, endField] = fields
+
+    if (
+      Array.isArray(values[field]) &&
+      typeof values[field][0].format === 'function'
+    ) {
+      const [startValue, endValue] = values[field]
+      values[startField] = startValue.format(format)
+      values[endField] = endValue.format(format)
+      delete values[field]
+    } else {
+      values[startField] = ''
+      values[endField] = ''
+    }
+  })
+  return values
 }

@@ -5,8 +5,8 @@ export type TGoods = {
   name: string
   price: number
 }
-export const getGoodsList = () => {
-  return request.get('/goods')
+export const getGoodsList = (data: any) => {
+  return request.get('/goods', data)
 }
 
 export const getGoods = (id: string) => {
