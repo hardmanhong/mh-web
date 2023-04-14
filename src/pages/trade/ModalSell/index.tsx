@@ -33,7 +33,7 @@ const ModalSell: React.FC<IProps> = ({ open, data, onCancel, onOk }) => {
             component: (
               <Space align='baseline'>
                 <Form.Item
-                  name='sellPrice'
+                  name='price'
                   rules={[
                     {
                       required: true,
@@ -44,7 +44,7 @@ const ModalSell: React.FC<IProps> = ({ open, data, onCancel, onOk }) => {
                   <InputNumber min={0} placeholder='价格' addonAfter='万' />
                 </Form.Item>
                 <Form.Item
-                  name='sellQuantity'
+                  name='quantity'
                   rules={[
                     {
                       required: true,

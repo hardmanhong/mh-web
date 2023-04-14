@@ -41,7 +41,7 @@ const handleRequest = (config: AxiosRequestConfig<any>) => {
 const handleResponse = (response: AxiosResponse<any, any>) => {
   const { status, data, config } = response
   const { code, message: apiMessage } = data
-  if ([200, 201, 204, 206].includes(status)) {
+  if (status === 200) {
     // 200 OK：表示请求已成功，服务器已成功返回所请求的数据。
     // 201 Created：表示请求已成功，服务器已创建一个新的资源。
     // 204 No Content：表示请求已成功，但服务器没有返回任何内容。

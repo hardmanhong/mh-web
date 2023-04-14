@@ -42,15 +42,16 @@ const business: React.FC<IProps> = () => {
     })
   }
   const onOk = (values: TGoods) => {
-    closeModalEdit()
     const id = modalEditProps.data?.id
     if (id) {
       updateGoods(id, values).then(() => {
+        closeModalEdit()
         message.success('操作成功')
         onSearch()
       })
     } else {
       createGoods(values).then(() => {
+        closeModalEdit()
         message.success('操作成功')
         onSearch()
       })

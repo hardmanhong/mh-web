@@ -32,7 +32,7 @@ import { IProps } from './types'
 
 const Trade: React.FC<IProps> = () => {
   const [form] = Form.useForm()
-  const { tableProps, paginationProps, onSearch } =
+  const { data, tableProps, paginationProps, onSearch } =
     usePaginated(getTradeBuyList)
   const {
     data: { list: goodsList = [] }
@@ -58,7 +58,7 @@ const Trade: React.FC<IProps> = () => {
   const onSell = (record: any) => {
     openModalSell({
       goodsId: record?.goods?.id,
-      tradeBuyId: record.id
+      buyId: record.id
     })
   }
   const onDelete = (record: any) => {
@@ -69,25 +69,26 @@ const Trade: React.FC<IProps> = () => {
     })
   }
   const onEditOk = (values: TTradeBuy) => {
-    closeModalEdit()
     const id = modalEditProps.data?.id
     if (id) {
       updateTradeBuy(id, values).then(() => {
+        closeModalEdit()
         message.success('操作成功')
         onSearch()
       })
     } else {
       createTradeBuy(values).then(() => {
+        closeModalEdit()
         message.success('操作成功')
         onSearch()
       })
     }
   }
   const onSellOk = (values: TTradeSell) => {
-    closeModalSell()
     const id = modalSellProps.data?.id
     if (id) {
       updateTradeSell(id, values).then(() => {
+        closeModalSell()
         message.success('操作成功')
         onSearch()
       })
@@ -96,6 +97,7 @@ const Trade: React.FC<IProps> = () => {
         ...values,
         ...modalSellProps.data
       }).then(() => {
+        closeModalSell()
         message.success('操作成功')
         onSearch()
       })
@@ -153,36 +155,10 @@ const Trade: React.FC<IProps> = () => {
                 size='small'
                 itemLayout='horizontal'
                 dataSource={record.sales}
-                renderItem={(item: any) => (
-                  <List.Item>
-                    <Row style={{ width: '100%' }}>
-                      <Col span={6}>
-                        <Space>
-                          <Tag color='success'>卖</Tag>
-                          <div>
-                            {item.sellPrice}万/{item.sellQuantity}个
-                          </div>
-                        </Space>
-                      </Col>
-                      <Col span={6}>
-                        <Space>
-                          <Tag color='processing'>
-                            <CalendarOutlined />
-                          </Tag>
-                          {formatDate(item.createdAt)}
-                        </Space>
-                      </Col>
-                      {item.remark && (
-                        <Col span={10}>
-                          <Space>
-                            <Tag color='default'>
-                              <PushpinOutlined />
-                            </Tag>
-                            <div>{item.remark}</div>
-                          </Space>
-                        </Col>
-                      )}
-                      <Col span={2}>
+                renderItem={(item: any, index) => (
+                  <>
+                    <List.Item
+                      actions={[
                         <Typography.Link
                           onClick={() => {
                             onEditSell(record, item)
@@ -190,9 +166,62 @@ const Trade: React.FC<IProps> = () => {
                         >
                           编辑
                         </Typography.Link>
-                      </Col>
-                    </Row>
-                  </List.Item>
+                      ]}
+                    >
+                      <Row style={{ width: '100%' }}>
+                        <Col span={8}>
+                          <Space>
+                            <Tag color='gold'>利润</Tag>
+                            <div>
+                              {[
+                                '每个盈利',
+                                item.profit,
+                                '万，利润',
+                                item.totalProfit,
+                                '万'
+                              ].join(' ')}
+                            </div>
+                          </Space>
+                        </Col>
+                        <Col span={5}>
+                          <Space>
+                            <Tag color='success'>卖</Tag>
+                            <div>
+                              {item.price}万，{item.quantity}个
+                            </div>
+                          </Space>
+                        </Col>
+                        <Col span={5}>
+                          <Space>
+                            <Tag color='processing'>
+                              <CalendarOutlined />
+                            </Tag>
+                            {formatDate(item.createdAt)}
+                          </Space>
+                        </Col>
+                        <Col span={5}>
+                          <Space>
+                            <Tag color='default'>
+                              <PushpinOutlined />
+                            </Tag>
+                            <div>{item.remark}</div>
+                          </Space>
+                        </Col>
+                      </Row>
+                    </List.Item>
+                    {index === record?.sales?.length - 1 && (
+                      <List.Item>
+                        <Row style={{ width: '100%' }}>
+                          <Col span={8}>
+                            <Space>
+                              <Tag color='success'>总计</Tag>
+                              <div>{record.totalProfit} 万</div>
+                            </Space>
+                          </Col>
+                        </Row>
+                      </List.Item>
+                    )}
+                  </>
                 )}
               />
             )
@@ -201,7 +230,17 @@ const Trade: React.FC<IProps> = () => {
           {...tableProps}
         />
       }
-      pagination={<ZPagination {...paginationProps} />}
+      pagination={
+        <ZPagination
+          left={
+            <Space>
+              <Tag color='success'>总计</Tag>
+              <div>{data?.totalProfit} 万</div>
+            </Space>
+          }
+          {...paginationProps}
+        />
+      }
     >
       <ModalEdit
         {...modalEditProps}

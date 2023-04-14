@@ -1,4 +1,4 @@
-import { DatePicker, Popconfirm, Space, Typography } from 'antd'
+import { DatePicker, Popconfirm, Space, Tag, Tooltip, Typography } from 'antd'
 import { SelectFilter } from '@/components'
 import { useTableScroll } from '@/hooks'
 import { computedScroll, formatDate } from '@/utils'
@@ -61,14 +61,37 @@ export const tableStaticPropsFn = ({
       )
     },
     {
-      title: '买卖',
+      title: (
+        <Space>
+          <span>买卖</span>
+          <Tag color='success'>正常</Tag>
+          <Tooltip title='买入超过10个，存货超过70%'>
+            <Tag color='error'>滞销</Tag>
+          </Tooltip>
+        </Space>
+      ),
       dataIndex: 'in',
       render: (_: any, record: any) => (
         <Space direction='vertical'>
           <div>
-            买入：{record.buyPrice}万/{record.buyQuantity}个
+            买入：{record.price}万/{record.quantity}个
           </div>
-          <div>库存：{record.stock}个</div>
+          <div>
+            库存：
+            <Tag
+              // 买入超过10个，70%存货时显示红色
+              color={
+                record.quantity > 10
+                  ? record.inventory / record.quantity > 0.7
+                    ? 'error'
+                    : 'success'
+                  : 'success'
+              }
+            >
+              {record.inventory}
+            </Tag>
+            个
+          </div>
         </Space>
       )
     },
@@ -104,6 +127,7 @@ export const tableStaticPropsFn = ({
             编辑
           </Typography.Link>
           <Typography.Link
+            disabled={record.inventory <= 0}
             onClick={() => {
               onSell(record)
             }}

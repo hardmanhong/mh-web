@@ -63,7 +63,7 @@ const ModalEdit: React.FC<IProps> = ({
             component: (
               <Space align='baseline'>
                 <Form.Item
-                  name='buyPrice'
+                  name='price'
                   rules={[
                     {
                       required: true,
@@ -74,7 +74,7 @@ const ModalEdit: React.FC<IProps> = ({
                   <InputNumber min={0} placeholder='价格' addonAfter='万' />
                 </Form.Item>
                 <Form.Item
-                  name='buyQuantity'
+                  name='quantity'
                   rules={[
                     {
                       required: true,

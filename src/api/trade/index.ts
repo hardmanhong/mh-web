@@ -2,8 +2,8 @@ import request from '../request'
 
 export type TTradeBuy = {
   id?: number
-  buyPrice?: number
-  buyQuantity?: number
+  price?: number
+  quantity?: number
   goods?: {
     id: number
   }
@@ -11,38 +11,38 @@ export type TTradeBuy = {
 export type TTradeSell = {
   id?: number
   goodsId?: number
-  tradeBuyId?: number
-  sellPrice?: number
-  sellQuantity?: number
+  buyId?: number
+  price?: number
+  quantity?: number
 }
 export const getTradeBuyList = (data: any) => {
-  return request.get('/trade/buy', data)
+  return request.get('/buy', data)
 }
 
 export const getTradeBuy = (id: string) => {
-  return request.get(`/trade/buy/${id}`)
+  return request.get(`/buy/${id}`)
 }
 
 export const createTradeBuy = (data: TTradeBuy) => {
-  return request.post('/trade/buy', data)
+  return request.post('/buy', data)
 }
 
 export const updateTradeBuy = (id: number, data: TTradeBuy) => {
-  return request.put(`/trade/buy/${id}`, data)
+  return request.put(`/buy/${id}`, data)
 }
 
 export const deleteTradeBuy = (id: number) => {
-  return request.delete(`/trade/buy/${id}`)
+  return request.delete(`/buy/${id}`)
 }
 
 export const createTradeSell = (data: TTradeSell) => {
-  return request.post('/trade/sell', data)
+  return request.post('/sell', data)
 }
 
 export const updateTradeSell = (id: number, data: TTradeSell) => {
-  return request.put(`/trade/sell/${id}`, data)
+  return request.put(`/sell/${id}`, data)
 }
 
 export const deleteTradeSell = (id: number) => {
-  return request.delete(`/trade/sell/${id}`)
+  return request.delete(`/sell/${id}`)
 }
