@@ -9,7 +9,7 @@ const useTableScroll: TUseTableScroll = () => {
       const tableThead = document.querySelector('.ant-table-header')
       const { bottom } = tableThead?.getBoundingClientRect() || { bottom: 0 }
       const pagination = document.querySelector(
-        '.u2antd-pagination'
+        '.c-page-pagination'
       ) as HTMLElement
       const paginationHeight = pagination?.offsetHeight || 0
       const scrollHeight = `calc(100vh - ${bottom + paginationHeight + 16}px)`

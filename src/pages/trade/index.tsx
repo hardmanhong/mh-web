@@ -234,7 +234,9 @@ const Trade: React.FC<IProps> = () => {
         <ZPagination
           left={
             <Space>
-              <Tag color='success'>总计</Tag>
+              <Tag color='processing'>总计</Tag>
+              <div>{data?.totalAmount} 万</div>
+              <Tag color='success'>利润</Tag>
               <div>{data?.totalProfit} 万</div>
             </Space>
           }

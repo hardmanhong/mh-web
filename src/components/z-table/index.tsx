@@ -95,6 +95,7 @@ const ZTable: React.FC<ZTableProps<any>> = (props) => {
   )
 }
 ZTable.defaultProps = {
+  size: 'small',
   bordered: true,
   pagination: false
 }
