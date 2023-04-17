@@ -13,7 +13,7 @@ export type TUseRequest = (
   loading: boolean
   params: any
   data: any
-  run: (params: any) => Promise<any>
+  run: (params?: any) => Promise<any>
 }
 
 const useRequest: TUseRequest = (api, options) => {

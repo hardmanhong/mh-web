@@ -12,7 +12,7 @@ const ModalSell: React.FC<IProps> = ({ open, data, onCancel, onOk }) => {
   }
   return (
     <Modal
-      title={data.id ? '创建卖出记录' : '编辑卖出记录'}
+      title={data.id ? '编辑卖出记录' : '创建卖出记录'}
       open={open}
       onCancel={onCancel}
       onOk={handleOk}
@@ -21,6 +21,23 @@ const ModalSell: React.FC<IProps> = ({ open, data, onCancel, onOk }) => {
         form={form}
         initialValues={data}
         list={[
+          {
+            colProps: {
+              span: 24
+            },
+            props: {
+              label: '商品',
+              style: { marginBottom: 0 }
+            },
+            component: (
+              <Space>
+                <span>{data?.goods?.name}</span>
+                <span>
+                  {data?.goods?.minPrice + '~' + data?.goods?.maxPrice + '万'}
+                </span>
+              </Space>
+            )
+          },
           {
             colProps: {
               span: 24

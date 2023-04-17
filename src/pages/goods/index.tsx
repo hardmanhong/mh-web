@@ -19,14 +19,16 @@ const business: React.FC<IProps> = () => {
   const [modalEditProps, openModalEdit, closeModalEdit] = useModalPrpos<TGoods>(
     {
       name: '',
-      price: 0
+      minPrice: 0,
+      maxPrice: 0
     }
   )
 
   const onAdd = () => {
     openModalEdit({
       name: '',
-      price: 0
+      minPrice: 0,
+      maxPrice: 0
     })
   }
   const onEdit = (record: any) => {

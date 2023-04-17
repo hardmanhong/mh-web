@@ -3,9 +3,10 @@ import request from '../request'
 export type TGoods = {
   id?: number
   name: string
-  price: number
+  minPrice: number
+  maxPrice: number
 }
-export const getGoodsList = (data: any) => {
+export const getGoodsList = (data?: any) => {
   return request.get('/goods', data)
 }
 
@@ -13,7 +14,7 @@ export const getGoods = (id: string) => {
   return request.get(`/goods/${id}`)
 }
 
-export const createGoods = (data: TGoods) => {
+export const createGoods = (data: TGoods): Promise<{ id: number }> => {
   return request.post('/goods', data)
 }
 

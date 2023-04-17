@@ -46,16 +46,16 @@ export const tableStaticPropsFn = ({
   onSell: (record: any) => void
   onDelete: (record: any) => void
 }) => {
-  const [height, computedHeight] = useTableScroll()
+  const [height] = useTableScroll()
   const columns: any[] = [
     {
       title: '名称',
       dataIndex: 'name',
       render: (_: any, record: any) => (
         <Space direction='vertical'>
-          <div>名称：{record?.goods?.name}</div>
+          <div>{record?.goods?.name}</div>
           <div>
-            参考价：{record?.goods?.minPrice}~{record?.goods?.maxPrice}(万)
+            {record?.goods?.minPrice}~{record?.goods?.maxPrice}(万)
           </div>
         </Space>
       )
@@ -70,6 +70,7 @@ export const tableStaticPropsFn = ({
           </Tooltip>
         </Space>
       ),
+      sorter: true,
       dataIndex: 'in',
       render: (_: any, record: any) => (
         <Space direction='vertical'>
@@ -96,10 +97,6 @@ export const tableStaticPropsFn = ({
       )
     },
     {
-      title: '备注',
-      dataIndex: 'remark'
-    },
-    {
       width: 160,
       title: '创建时间',
       dataIndex: 'createdAt',
@@ -110,6 +107,10 @@ export const tableStaticPropsFn = ({
       title: '更新时间',
       dataIndex: 'updatedAt',
       render: (value: string) => formatDate(value)
+    },
+    {
+      title: '备注',
+      dataIndex: 'remark'
     },
     {
       width: 140,
@@ -136,11 +137,14 @@ export const tableStaticPropsFn = ({
           </Typography.Link>
           <Popconfirm
             title={`你确定要删除${record.name}吗？`}
+            disabled={record.hasSold === 1}
             onConfirm={() => {
               onDelete(record)
             }}
           >
-            <Typography.Link type='danger'>删除</Typography.Link>
+            <Typography.Link type='danger' disabled={record.hasSold === 1}>
+              删除
+            </Typography.Link>
           </Popconfirm>
         </Space>
       )

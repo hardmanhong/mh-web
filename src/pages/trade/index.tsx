@@ -11,7 +11,13 @@ import {
   Typography,
   message
 } from 'antd'
-import { getGoodsList } from '@/api/goods'
+import {
+  FilterValue,
+  SorterResult,
+  TablePaginationConfig
+} from 'antd/lib/table/interface'
+import moment from 'moment'
+import { createGoods, getGoodsList } from '@/api/goods'
 import {
   TTradeBuy,
   TTradeSell,
@@ -30,12 +36,23 @@ import ModalSell from './ModalSell'
 import { formPropsFn, tableStaticPropsFn } from './data'
 import { IProps } from './types'
 
+type TEditBuy = {
+  _goodsType?: 1 | 2
+  goodsId?: number
+  name?: string
+  minPrice?: number
+  maxPrice?: number
+  id?: number
+  price?: number
+  quantity?: number
+}
 const Trade: React.FC<IProps> = () => {
   const [form] = Form.useForm()
   const { data, tableProps, paginationProps, onSearch } =
     usePaginated(getTradeBuyList)
   const {
-    data: { list: goodsList = [] }
+    data: { list: goodsList = [] },
+    run: fetchGoodsList
   } = useRequest(getGoodsList, {
     params: {
       page: 1,
@@ -57,6 +74,7 @@ const Trade: React.FC<IProps> = () => {
   }
   const onSell = (record: any) => {
     openModalSell({
+      goods: record?.goods,
       goodsId: record?.goods?.id,
       buyId: record.id
     })
@@ -68,20 +86,36 @@ const Trade: React.FC<IProps> = () => {
       onSearch()
     })
   }
-  const onEditOk = (values: TTradeBuy) => {
-    const id = modalEditProps.data?.id
-    if (id) {
-      updateTradeBuy(id, values).then(() => {
-        closeModalEdit()
-        message.success('操作成功')
-        onSearch()
-      })
-    } else {
-      createTradeBuy(values).then(() => {
-        closeModalEdit()
-        message.success('操作成功')
-        onSearch()
-      })
+  const onEditOk = async (values: TEditBuy) => {
+    try {
+      const isCreateGoods = values?._goodsType === 2
+      if (isCreateGoods) {
+        const goodsId = await createGoods({
+          name: values.name as string,
+          minPrice: values.minPrice as number,
+          maxPrice: values.maxPrice as number
+        }).then((goods) => {
+          return goods.id
+        })
+        values.goodsId = goodsId
+        fetchGoodsList()
+      }
+      const id = modalEditProps.data?.id
+      if (id) {
+        updateTradeBuy(id, values).then(() => {
+          closeModalEdit()
+          message.success('操作成功')
+          onSearch()
+        })
+      } else {
+        createTradeBuy(values).then(() => {
+          closeModalEdit()
+          message.success('操作成功')
+          onSearch()
+        })
+      }
+    } catch (error) {
+      console.log('error', error)
     }
   }
   const onSellOk = (values: TTradeSell) => {
@@ -105,6 +139,7 @@ const Trade: React.FC<IProps> = () => {
   }
   const onEditSell = (buy: any, sell: any) => {
     openModalSell({
+      goods: buy?.goods,
       ...sell
     })
   }
@@ -118,6 +153,23 @@ const Trade: React.FC<IProps> = () => {
 
     onSearch(params)
   }
+  const onTableChange = (
+    pagination: TablePaginationConfig,
+    filters: Record<string, FilterValue | null>,
+    sorter: SorterResult<any> | SorterResult<any>[]
+  ) => {
+    console.log('sorter', sorter)
+    sorter = sorter as SorterResult<any>
+    if (sorter.field === 'in') {
+      onSearch({
+        inventorySorter: sorter.order
+          ? sorter.order === 'ascend'
+            ? 'asc'
+            : 'desc'
+          : null
+      })
+    }
+  }
   const tableStaticProps = tableStaticPropsFn({ onEdit, onSell, onDelete })
   const formProps = formPropsFn(goodsList)
   return (
@@ -127,7 +179,13 @@ const Trade: React.FC<IProps> = () => {
         <PageList.Search
           left={
             <PageList.Search.Left>
-              <ZForm {...formProps} form={form}></ZForm>
+              <ZForm
+                {...formProps}
+                initialValues={{
+                  createdAt: [moment().subtract(29, 'days'), moment()]
+                }}
+                form={form}
+              ></ZForm>
             </PageList.Search.Left>
           }
           right={
@@ -149,7 +207,9 @@ const Trade: React.FC<IProps> = () => {
               </Button>
             </Space>
           }
+          showSorterTooltip={false}
           expandable={{
+            rowExpandable: (record) => record?.sales?.length > 0,
             expandedRowRender: (record) => (
               <List
                 size='small'
@@ -171,7 +231,7 @@ const Trade: React.FC<IProps> = () => {
                       <Row style={{ width: '100%' }}>
                         <Col span={8}>
                           <Space>
-                            <Tag color='gold'>利润</Tag>
+                            <Tag color='success'>利润</Tag>
                             <div>
                               {[
                                 '每个盈利',
@@ -185,7 +245,7 @@ const Trade: React.FC<IProps> = () => {
                         </Col>
                         <Col span={5}>
                           <Space>
-                            <Tag color='success'>卖</Tag>
+                            <Tag color='gold'>卖</Tag>
                             <div>
                               {item.price}万，{item.quantity}个
                             </div>
@@ -226,6 +286,7 @@ const Trade: React.FC<IProps> = () => {
               />
             )
           }}
+          onChange={onTableChange}
           {...tableStaticProps}
           {...tableProps}
         />
@@ -234,7 +295,7 @@ const Trade: React.FC<IProps> = () => {
         <ZPagination
           left={
             <Space>
-              <Tag color='processing'>总计</Tag>
+              <Tag color='processing'>花费</Tag>
               <div>{data?.totalAmount} 万</div>
               <Tag color='success'>利润</Tag>
               <div>{data?.totalProfit} 万</div>

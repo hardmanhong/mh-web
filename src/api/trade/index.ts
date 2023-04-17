@@ -1,3 +1,4 @@
+import { TGoods } from '../goods'
 import request from '../request'
 
 export type TTradeBuy = {
@@ -7,10 +8,12 @@ export type TTradeBuy = {
   goods?: {
     id: number
   }
+  _goodsType?: 1 | 2
 }
 export type TTradeSell = {
   id?: number
   goodsId?: number
+  goods?: TGoods
   buyId?: number
   price?: number
   quantity?: number
