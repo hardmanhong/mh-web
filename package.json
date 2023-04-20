@@ -57,15 +57,15 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.0",
-    "antd": "^4.23.6",
+    "@antv/g2plot": "^2.4.29",
+    "antd": "^5.4.3",
     "axios": "^1.1.3",
     "clsx": "^1.2.1",
+    "dayjs": "^1.11.7",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-resizable": "^3.0.5",
-    "react-router-dom": "^6.4.2",
-    "u2antd": "^0.1.15",
-    "u2hooks": "^0.1.8"
+    "react-router-dom": "^6.4.2"
   }
 }

@@ -49,6 +49,10 @@ export const tableStaticPropsFn = ({
   const [height] = useTableScroll()
   const columns: any[] = [
     {
+      sorter: true,
+      showSorterTooltip: {
+        title: '排序已卖出'
+      },
       title: '名称',
       dataIndex: 'name',
       render: (_: any, record: any) => (
@@ -61,6 +65,8 @@ export const tableStaticPropsFn = ({
       )
     },
     {
+      sorter: true,
+      showSorterTooltip: false,
       title: (
         <Space>
           <span>买卖</span>
@@ -70,7 +76,6 @@ export const tableStaticPropsFn = ({
           </Tooltip>
         </Space>
       ),
-      sorter: true,
       dataIndex: 'in',
       render: (_: any, record: any) => (
         <Space direction='vertical'>

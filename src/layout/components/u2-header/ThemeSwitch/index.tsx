@@ -1,7 +1,7 @@
-import DarkIcon from './dark-icon'
-import LightIcon from './light-icon'
 import { Switch } from 'antd'
 import { useTheme } from '@/provider'
+import DarkIcon from './dark-icon'
+import LightIcon from './light-icon'
 import './style.less'
 
 const ThemeSwitch = () => {

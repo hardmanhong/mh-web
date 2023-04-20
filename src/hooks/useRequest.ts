@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { message } from 'antd'
+import useResponse from './useResponse'
 
 export type TUseRequest = (
   api: (params: any) => Promise<any>,
@@ -24,15 +24,19 @@ const useRequest: TUseRequest = (api, options) => {
       ? options.formatData(options.defaultData)
       : options.defaultData
   )
+  const [handleSuccess, handleError] = useResponse()
   const run = useCallback(
-    (params?: any) => {
+    (nParams?: any) => {
       const nextParams = {
         ...options.params,
-        ...params
+        ...params,
+        ...nParams
       }
       setParams(nextParams)
       setLoading(true)
       return api(nextParams)
+        .then((res) => handleSuccess(res))
+        .catch((err) => handleError(err))
         .then((res) => {
           if (typeof options?.formatData === 'function') {
             setData(options.formatData(res))
@@ -40,12 +44,6 @@ const useRequest: TUseRequest = (api, options) => {
             setData(res)
           }
           return res
-        })
-        .catch((err) => {
-          if (typeof err.code === 'number' && err.message) {
-            message.error(err.message)
-          }
-          return err
         })
         .finally(() => {
           setLoading(false)

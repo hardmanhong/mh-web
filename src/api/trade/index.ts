@@ -38,6 +38,13 @@ export const deleteTradeBuy = (id: number) => {
   return request.delete(`/buy/${id}`)
 }
 
+export const getProfit = (data: { type: string }) => {
+  return request.get('/buy/profit', data)
+}
+export const getTotalProfit = () => {
+  return request.get(`/buy/totalProfit`)
+}
+
 export const createTradeSell = (data: TTradeSell) => {
   return request.post('/sell', data)
 }

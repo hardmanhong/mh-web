@@ -35,9 +35,9 @@ export const exportExcel = (name: string, data: Blob) => {
   URL.revokeObjectURL(link.href)
 }
 
-export const formatDate = (date: string) => {
+export const formatDate = (date: string, format = 'YYYY-MM-DD HH:mm:ss') => {
   if (!date) return date
-  return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
+  return dayjs(date).format(format)
 }
 interface IFormatField {
   field: string

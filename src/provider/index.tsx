@@ -6,6 +6,7 @@ export {
   useGetBreadcrumb,
   useSetBreadcrumb
 } from './breadcrumb'
+
 export {
   ThemeProvider,
   useGetTheme,
@@ -13,6 +14,8 @@ export {
   useSetTheme,
   useTheme
 } from './theme'
+
+export { MessgaeProvider, useMessage } from './message'
 
 export function composeProviders(...providers: IProvider[]) {
   return ({ children }: { children: React.ReactNode }) =>

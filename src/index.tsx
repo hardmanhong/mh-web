@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom/client'
+import 'antd/dist/reset.css'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import App from './App'

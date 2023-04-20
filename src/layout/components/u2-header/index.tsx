@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { UserOutlined } from '@ant-design/icons'
-import { Avatar, Dropdown, Layout, Menu } from 'antd'
+import { Avatar, Dropdown, Layout } from 'antd'
 import ThemeSwitch from './ThemeSwitch'
 import logo from './logo.png'
 import './style.less'
@@ -27,15 +27,22 @@ const U2Header: React.FC = () => {
         <div className='right'>
           <ThemeSwitch />
           <Dropdown
-            overlay={
-              <Menu>
-                <Menu.Item key='changepsw'>修改密码</Menu.Item>
-                <Menu.Divider />
-                <Menu.Item key='logout' onClick={onLogout}>
-                  退出登录
-                </Menu.Item>
-              </Menu>
-            }
+            menu={{
+              items: [
+                {
+                  label: '修改密码',
+                  key: 'changepsw'
+                },
+                {
+                  type: 'divider'
+                },
+                {
+                  label: '退出登录',
+                  key: 'logout',
+                  onClick: onLogout
+                }
+              ]
+            }}
           >
             <div className='user'>
               <Avatar size={24} icon={<UserOutlined />}>

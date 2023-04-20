@@ -1,22 +1,12 @@
 import React from 'react'
 import { CalendarOutlined, PushpinOutlined } from '@ant-design/icons'
-import {
-  Button,
-  Col,
-  Form,
-  List,
-  Row,
-  Space,
-  Tag,
-  Typography,
-  message
-} from 'antd'
+import { Button, Col, Form, List, Row, Space, Tag, Typography } from 'antd'
 import {
   FilterValue,
   SorterResult,
   TablePaginationConfig
 } from 'antd/lib/table/interface'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { createGoods, getGoodsList } from '@/api/goods'
 import {
   TTradeBuy,
@@ -30,6 +20,7 @@ import {
 } from '@/api/trade'
 import { PageList, ZForm, ZPagination, ZTable } from '@/components'
 import { useModalPrpos, usePaginated, useRequest } from '@/hooks'
+import { useMessage } from '@/provider'
 import { formatDate, formatDateFieldsQuery } from '@/utils'
 import ModalEdit from './ModalEdit'
 import ModalSell from './ModalSell'
@@ -47,8 +38,9 @@ type TEditBuy = {
   quantity?: number
 }
 const Trade: React.FC<IProps> = () => {
+  const message = useMessage()
   const [form] = Form.useForm()
-  const { data, tableProps, paginationProps, onSearch } =
+  const { data, tableProps, paginationProps, onSearch, run } =
     usePaginated(getTradeBuyList)
   const {
     data: { list: goodsList = [] },
@@ -144,6 +136,13 @@ const Trade: React.FC<IProps> = () => {
     })
   }
   const handleSearch = () => {
+    run({})
+      .then((res) => {
+        console.log('res', res)
+      })
+      .catch((err) => {
+        console.log('err', err)
+      })
     const params = formatDateFieldsQuery(form.getFieldsValue(), [
       {
         field: 'createdAt',
@@ -159,15 +158,47 @@ const Trade: React.FC<IProps> = () => {
     sorter: SorterResult<any> | SorterResult<any>[]
   ) => {
     console.log('sorter', sorter)
-    sorter = sorter as SorterResult<any>
-    if (sorter.field === 'in') {
-      onSearch({
-        inventorySorter: sorter.order
-          ? sorter.order === 'ascend'
-            ? 'asc'
-            : 'desc'
-          : null
+    if ((sorter as SorterResult<any>).field) {
+      sorter = sorter as SorterResult<any>
+      if (sorter.field === 'in') {
+        onSearch({
+          inventorySorter: sorter.order
+            ? sorter.order === 'ascend'
+              ? 'asc'
+              : 'desc'
+            : null
+        })
+      } else if (sorter.field === 'name') {
+        onSearch({
+          hasSoldSorter: sorter.order
+            ? sorter.order === 'ascend'
+              ? 'asc'
+              : 'desc'
+            : null
+        })
+      }
+    } else if ((sorter as SorterResult<any>[]).length) {
+      sorter = sorter as SorterResult<any>[]
+      const params: {
+        [key: string]: any
+      } = { inventorySorter: null, hasSoldSorter: null }
+      sorter.forEach((item) => {
+        if (item.field === 'in') {
+          params.inventorySorter = item.order
+            ? item.order === 'ascend'
+              ? 'asc'
+              : 'desc'
+            : null
+        }
+        if (item.field === 'name') {
+          params.hasSoldSorter = item.order
+            ? item.order === 'ascend'
+              ? 'asc'
+              : 'desc'
+            : null
+        }
       })
+      onSearch(params)
     }
   }
   const tableStaticProps = tableStaticPropsFn({ onEdit, onSell, onDelete })
@@ -182,7 +213,7 @@ const Trade: React.FC<IProps> = () => {
               <ZForm
                 {...formProps}
                 initialValues={{
-                  createdAt: [moment().subtract(29, 'days'), moment()]
+                  createdAt: [dayjs().subtract(29, 'days'), dayjs()]
                 }}
                 form={form}
               ></ZForm>
@@ -207,7 +238,6 @@ const Trade: React.FC<IProps> = () => {
               </Button>
             </Space>
           }
-          showSorterTooltip={false}
           expandable={{
             rowExpandable: (record) => record?.sales?.length > 0,
             expandedRowRender: (record) => (
