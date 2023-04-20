@@ -53,7 +53,7 @@ const Home: React.FC<any> = () => {
       lineRef.current.update({
         data: profit.map((item: any) => ({
           ...item,
-          field: '利润'
+          field: '利润（万）'
         }))
       })
     }

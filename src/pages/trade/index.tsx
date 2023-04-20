@@ -275,7 +275,7 @@ const Trade: React.FC<IProps> = () => {
                         </Col>
                         <Col span={5}>
                           <Space>
-                            <Tag color='gold'>卖</Tag>
+                            <Tag color='warning'>卖</Tag>
                             <div>
                               {item.price}万，{item.quantity}个
                             </div>
