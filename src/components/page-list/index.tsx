@@ -1,4 +1,5 @@
 import React from 'react'
+import { Space } from 'antd'
 import clsx from 'clsx'
 import { PageSearch, PageTitle } from './components'
 import './style.less'
@@ -24,8 +25,10 @@ const PageListFC: React.FC<IProps> = ({
             )}
           </div>
         )}
-        {search && <div className='c-page-search'>{search}</div>}
-        {table && <div className='c-page-table'>{table}</div>}
+        <Space direction='vertical'>
+          {search && <div className='c-page-search'>{search}</div>}
+          {table && <div className='c-page-table'>{table}</div>}
+        </Space>
         {pagination && <div className='c-page-pagination'>{pagination}</div>}
       </div>
       {children}
