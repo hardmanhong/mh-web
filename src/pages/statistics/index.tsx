@@ -10,7 +10,7 @@ import {
   Spin,
   Statistic
 } from 'antd'
-import { getProfit, getTotalProfit } from '@/api/trade'
+import { getStatistics, getStatisticsTotalProfit } from '@/api/statistics'
 import { useRequest } from '@/hooks'
 import { useGetTheme } from '@/provider'
 
@@ -19,18 +19,17 @@ const Home: React.FC<any> = () => {
   const lineElementRef = useRef<HTMLDivElement | null>(null)
   const lineRef = useRef<Line | null>(null)
   const [type, setType] = useState('day')
-  const { data: totalProfit } = useRequest(getTotalProfit, {
+  const { data: totalProfit } = useRequest(getStatisticsTotalProfit, {
     defaultData: 0
   })
   const {
     loading,
     data: profit,
     run: fetchProfit
-  } = useRequest(getProfit, {
+  } = useRequest(getStatistics, {
     params: { type },
     defaultData: []
   })
-  console.log('theme', profit)
   useEffect(() => {
     if (lineElementRef.current) {
       lineRef.current = new Line(lineElementRef.current, {
@@ -38,7 +37,7 @@ const Home: React.FC<any> = () => {
         data: [],
         xField: 'label',
         yField: 'value',
-        seriesField: 'field'
+        seriesField: 'type'
       })
       lineRef.current.render()
     }
@@ -52,8 +51,8 @@ const Home: React.FC<any> = () => {
     if (lineRef.current) {
       lineRef.current.update({
         data: profit.map((item: any) => ({
-          ...item,
-          field: '利润（万）'
+          ...item
+          // field: '利润（万）'
         }))
       })
     }
@@ -67,7 +66,7 @@ const Home: React.FC<any> = () => {
     })
   }
   return (
-    <div className='page-home'>
+    <div className='page-statistics'>
       <Space size='large' direction='vertical' style={{ width: '100%' }}>
         <Row>
           <Col span={12}>

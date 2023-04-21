@@ -9,7 +9,7 @@ import NotFound from '@/pages/not-found'
 // 不需要懒加载的页面组件
 
 // 需要懒加载的页面组件
-const Home = lazy(() => import('@/pages/home'))
+const Statistics = lazy(() => import('@/pages/statistics'))
 const TestList = lazy(() => import('@/pages/test/list'))
 const TestRecord = lazy(() => import('@/pages/test/record'))
 const TestDetail = lazy(() => import('@/pages/test/detail'))
@@ -86,7 +86,7 @@ const routerConfig: RouteObject[] = [
     children: [
       {
         path: '/home',
-        element: LazyLoad(Home, 'home')
+        element: LazyLoad(Statistics, 'statistics')
       },
       {
         path: '/trade',
