@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
-import useResponse from './useResponse'
 
 export type TUseRequest = (
   api: (params: any) => Promise<any>,
-  options: {
+  options?: {
     params?: any
     manual?: boolean
     defaultData?: any
@@ -18,32 +17,32 @@ export type TUseRequest = (
 
 const useRequest: TUseRequest = (api, options) => {
   const [loading, setLoading] = useState(false)
-  const [params, setParams] = useState(options.params)
+  const [params, setParams] = useState(options?.params)
   const [data, setData] = useState(
     typeof options?.formatData === 'function'
-      ? options.formatData(options.defaultData)
-      : options.defaultData
+      ? options?.formatData(options?.defaultData)
+      : options?.defaultData
   )
-  const [handleSuccess, handleError] = useResponse()
   const run = useCallback(
-    (nParams?: any) => {
+    (nparams?: any) => {
       const nextParams = {
-        ...options.params,
+        ...options?.params,
         ...params,
-        ...nParams
+        ...nparams
       }
       setParams(nextParams)
       setLoading(true)
       return api(nextParams)
-        .then((res) => handleSuccess(res))
-        .catch((err) => handleError(err))
         .then((res) => {
           if (typeof options?.formatData === 'function') {
-            setData(options.formatData(res))
+            setData(options?.formatData(res))
           } else {
             setData(res)
           }
           return res
+        })
+        .catch((err) => {
+          return Promise.reject(err)
         })
         .finally(() => {
           setLoading(false)
@@ -52,10 +51,10 @@ const useRequest: TUseRequest = (api, options) => {
     [params]
   )
   useEffect(() => {
-    if (!options.manual) {
+    if (!options?.manual) {
       run()
     }
-  }, [options.manual])
+  }, [options?.manual])
   return {
     loading,
     params,

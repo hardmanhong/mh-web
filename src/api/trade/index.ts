@@ -17,6 +17,8 @@ export type TTradeSell = {
   buyId?: number
   price?: number
   quantity?: number
+  buyPrice?: number
+  buyQuantity?: number
 }
 export const getTradeBuyList = (data: any) => {
   return request.get('/buy', data)

@@ -68,3 +68,5 @@ export const formatDateFieldsQuery: IHandleDateField = (data, fields) => {
   })
   return values
 }
+
+export { EVENT, default as eventEmitter } from './EventEmitter'

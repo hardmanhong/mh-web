@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Space, message } from 'antd'
+import { Button, Form, Space } from 'antd'
 import type { TGoods } from '@/api/goods'
 import {
   createGoods,
@@ -9,11 +9,13 @@ import {
 } from '@/api/goods'
 import { PageList, ZForm, ZPagination, ZTable } from '@/components'
 import { useModalPrpos, usePaginated } from '@/hooks'
+import { useMessage } from '@/provider'
 import ModalEdit from './ModalEdit'
 import { formPropsFn, tableStaticPropsFn } from './data'
 import { IProps } from './types'
 
 const business: React.FC<IProps> = () => {
+  const message = useMessage()
   const [form] = Form.useForm()
   const { tableProps, paginationProps, onSearch } = usePaginated(getGoodsList)
   const [modalEditProps, openModalEdit, closeModalEdit] = useModalPrpos<TGoods>(

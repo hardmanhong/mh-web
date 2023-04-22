@@ -43,6 +43,20 @@ const ModalSell: React.FC<IProps> = ({ open, data, onCancel, onOk }) => {
               span: 24
             },
             props: {
+              label: '买入',
+              style: { marginBottom: 0 }
+            },
+            component: (
+              <span>
+                {data?.buyPrice}万/{data?.buyQuantity}个
+              </span>
+            )
+          },
+          {
+            colProps: {
+              span: 24
+            },
+            props: {
               label: '卖出',
               required: true,
               style: { marginBottom: 0 }

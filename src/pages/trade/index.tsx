@@ -67,6 +67,8 @@ const Trade: React.FC<IProps> = () => {
   const onSell = (record: any) => {
     openModalSell({
       goods: record?.goods,
+      buyPrice: record.price,
+      buyQuantity: record.quantity,
       goodsId: record?.goods?.id,
       buyId: record.id
     })
@@ -344,7 +346,7 @@ const Trade: React.FC<IProps> = () => {
       />
       <ModalSell
         {...modalSellProps}
-        key={modalSellProps.data?.id}
+        key={modalSellProps.data?.buyId}
         onCancel={closeModalSell}
         onOk={(values: any) => onSellOk(values)}
       />
