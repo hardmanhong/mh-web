@@ -68,7 +68,7 @@ const Trade: React.FC<IProps> = () => {
     openModalSell({
       goods: record?.goods,
       buyPrice: record.price,
-      buyQuantity: record.quantity,
+      inventory: record.inventory,
       goodsId: record?.goods?.id,
       buyId: record.id
     })

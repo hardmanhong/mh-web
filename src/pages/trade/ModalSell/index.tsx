@@ -48,7 +48,7 @@ const ModalSell: React.FC<IProps> = ({ open, data, onCancel, onOk }) => {
             },
             component: (
               <span>
-                {data?.buyPrice}万/{data?.buyQuantity}个
+                {data?.buyPrice}万/库存{data?.inventory}个
               </span>
             )
           },
