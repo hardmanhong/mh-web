@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
-const PAGE_LAYOUT_KEY = '__U2_PAGE_LAYOUT__'
-const defaultValue = window.localStorage.getItem(PAGE_LAYOUT_KEY) || 'tabs'
+const LAYOUT_KEY = '__U2_LAYOUT__'
+const defaultValue = window.localStorage.getItem(LAYOUT_KEY) || 'tabs'
 
 type Layout = 'tabs' | 'normal'
 
@@ -16,7 +16,7 @@ const useLayoutStore = create<State & Action>((set) => ({
   layout: defaultValue as Layout,
   setLayout: (layout: Layout) =>
     set(() => {
-      window.localStorage.setItem(PAGE_LAYOUT_KEY, layout)
+      window.localStorage.setItem(LAYOUT_KEY, layout)
       return { layout }
     })
 }))
