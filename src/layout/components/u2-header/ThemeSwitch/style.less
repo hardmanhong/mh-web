@@ -1,21 +1,17 @@
-.theme-switch {
-  display: flex;
-  padding: 0 12px;
-  .ant-switch {
-    background: var(--bg) !important;
+.button-switch {
+  background: var(--bg) !important;
+}
+.theme-icon {
+  fill: var(--color);
+  background: var(--bg);
+  svg {
+    width: 12px;
+    height: 12px;
   }
-  .theme-icon {
-    fill: var(--color);
-    background: var(--bg);
-    svg {
-      width: 12px;
-      height: 12px;
-    }
-    &.dark {
-      left: calc(100% - 21px);
-    }
-    &.light {
-      left: 2px;
-    }
+  &.dark {
+    left: calc(100% - 21px);
+  }
+  &.light {
+    left: 2px;
   }
 }

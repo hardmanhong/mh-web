@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { UserOutlined } from '@ant-design/icons'
-import { Avatar, Dropdown, Layout } from 'antd'
+import { Avatar, Dropdown, Layout, Space } from 'antd'
+import LayoutSwitch from './LayoutSwitch'
 import ThemeSwitch from './ThemeSwitch'
 import logo from './logo.png'
 import './style.less'
@@ -25,34 +26,37 @@ const U2Header: React.FC = () => {
           </a>
         </div>
         <div className='right'>
-          <ThemeSwitch />
-          <Dropdown
-            menu={{
-              items: [
-                {
-                  label: '修改密码',
-                  key: 'changepsw'
-                },
-                {
-                  type: 'divider'
-                },
-                {
-                  label: '退出登录',
-                  key: 'logout',
-                  onClick: onLogout
-                }
-              ]
-            }}
-          >
-            <div className='user'>
-              <Avatar size={24} icon={<UserOutlined />}>
-                {username}
-              </Avatar>
-              <div className='dropdown-link'>
-                <span className='name'>{username}</span>
+          <Space>
+            <LayoutSwitch />
+            <ThemeSwitch />
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    label: '修改密码',
+                    key: 'changepsw'
+                  },
+                  {
+                    type: 'divider'
+                  },
+                  {
+                    label: '退出登录',
+                    key: 'logout',
+                    onClick: onLogout
+                  }
+                ]
+              }}
+            >
+              <div className='user'>
+                <Avatar size={24} icon={<UserOutlined />}>
+                  {username}
+                </Avatar>
+                <div className='dropdown-link'>
+                  <span className='name'>{username}</span>
+                </div>
               </div>
-            </div>
-          </Dropdown>
+            </Dropdown>
+          </Space>
         </div>
       </Header>
     </>

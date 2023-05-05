@@ -1,4 +1,5 @@
 export { default as ErrorBoundary } from './error-boundary'
+export { default as LazyLoad } from './lazy-load'
 export { default as Loading } from './loading'
 export { default as PageList } from './page-list'
 export { default as Permission } from './permission'

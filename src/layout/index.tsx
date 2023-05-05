@@ -16,7 +16,7 @@ const menus = [
   {
     name: '看板',
     icon: <HomeOutlined />,
-    path: '/home'
+    path: '/'
   },
   {
     name: '商品',

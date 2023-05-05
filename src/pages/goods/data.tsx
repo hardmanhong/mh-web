@@ -27,11 +27,12 @@ export const tableStaticPropsFn = ({
   onEdit: (record: any) => void
   onDelete: (record: any) => void
 }) => {
-  const [height, computedHeight] = useTableScroll()
+  const [height] = useTableScroll()
   const columns: any[] = [
     {
       title: 'ID',
-      dataIndex: 'id'
+      dataIndex: 'id',
+      width: 100
     },
     {
       title: '名称',

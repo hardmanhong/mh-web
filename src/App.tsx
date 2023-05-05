@@ -2,21 +2,16 @@ import { useEffect } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
-import {
-  BreadcrumbProvider,
-  MessgaeProvider,
-  useGetTheme,
-  useInitTheme
-} from './provider'
-import { DARK_THEME, LIGHT_THEME } from './provider/theme'
+import { MessgaeProvider } from './provider'
 import routes from './router'
+import { useThemeStore } from './store'
+import { DARK_THEME, LIGHT_THEME } from './store/theme'
 
 function App() {
-  const theme = useGetTheme()
-  const toggle = useInitTheme('#custom-theme', '/antd.dark.min.css')
+  const { theme, setTheme } = useThemeStore()
   useEffect(() => {
-    toggle(theme)
-  }, [theme])
+    setTheme(theme)
+  }, [])
   const themeToken = theme === 'light' ? LIGHT_THEME : DARK_THEME
   return (
     <ConfigProvider
@@ -26,9 +21,7 @@ function App() {
       }}
     >
       <MessgaeProvider>
-        <BreadcrumbProvider>
-          <RouterProvider router={routes}></RouterProvider>
-        </BreadcrumbProvider>
+        <RouterProvider router={routes}></RouterProvider>
       </MessgaeProvider>
     </ConfigProvider>
   )

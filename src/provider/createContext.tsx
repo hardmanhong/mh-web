@@ -2,15 +2,15 @@ import React, { useContext, useState } from 'react'
 import { IProvider } from './types'
 
 function createCtx<T>(
-  initialValue?: T
+  initialValue: T
 ): [
   IProvider,
   () => T & ({} | null),
-  () => React.Dispatch<React.SetStateAction<T | undefined>>
+  () => React.Dispatch<React.SetStateAction<T>>
 ] {
-  const storeContext = React.createContext<T | undefined>(undefined)
+  const storeContext = React.createContext<T>(initialValue)
   const dispatchContext = React.createContext<
-    React.Dispatch<React.SetStateAction<T | undefined>>
+    React.Dispatch<React.SetStateAction<T>>
   >(() => {})
 
   const useStore = () => {
@@ -30,7 +30,7 @@ function createCtx<T>(
   }
 
   const ContextProvider: IProvider = ({ children }) => {
-    const [state, dispatch] = useState<T | undefined>(initialValue)
+    const [state, dispatch] = useState<T>(initialValue)
 
     return (
       <dispatchContext.Provider value={dispatch}>

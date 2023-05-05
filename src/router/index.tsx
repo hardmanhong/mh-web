@@ -1,7 +1,7 @@
-import { Suspense, lazy } from 'react'
+import { lazy } from 'react'
 import type { RouteObject } from 'react-router-dom'
-import { Navigate, createBrowserRouter } from 'react-router-dom'
-import { ErrorBoundary, Loading, Permission } from '@/components'
+import { createBrowserRouter } from 'react-router-dom'
+import { ErrorBoundary, LazyLoad } from '@/components'
 import Layout from '@/layout'
 import Login from '@/pages/login'
 import NotFound from '@/pages/not-found'
@@ -15,25 +15,6 @@ const TestRecord = lazy(() => import('@/pages/test/record'))
 const TestDetail = lazy(() => import('@/pages/test/detail'))
 const Trade = lazy(() => import('@/pages/trade'))
 const Goods = lazy(() => import('@/pages/goods'))
-
-/**
- * @param Component 懒加载的组件
- * @param code 用于判断权限的字段(你可以自己定)
- * @returns
- */
-const LazyLoad = (
-  // Component: React.LazyExoticComponent<() => JSX.Element>,
-  Component: React.FC,
-  code?: string
-) => {
-  return (
-    <Permission code={code}>
-      <Suspense fallback={<Loading />}>
-        <Component />
-      </Suspense>
-    </Permission>
-  )
-}
 
 export interface UserInfo {
   name: string
@@ -71,13 +52,13 @@ const rootLoader = async () => {
     permissionRoutes: []
   }
 }
-
-const routerConfig: RouteObject[] = [
+export type TRoute = RouteObject & {
+  name: string
+  children?: TRoute[]
+}
+export const routerConfig: TRoute[] = [
   {
-    path: '/',
-    element: <Navigate to='/home' />
-  },
-  {
+    name: '看板',
     path: '/',
     id: 'root',
     errorElement: <ErrorBoundary />,
@@ -85,16 +66,24 @@ const routerConfig: RouteObject[] = [
     loader: rootLoader,
     children: [
       {
-        path: '/home',
+        name: '看板',
+        path: '/',
         element: LazyLoad(Statistics, 'statistics')
       },
       {
+        name: '买卖',
         path: '/trade',
         element: LazyLoad(Trade, 'trade')
       },
       {
+        name: '商品',
         path: '/goods',
         element: LazyLoad(Goods, 'goods')
+      },
+      {
+        name: 'Not Found',
+        path: '*',
+        element: <NotFound />
       }
       // {
       //   path: 'test',
@@ -116,13 +105,15 @@ const routerConfig: RouteObject[] = [
     ]
   },
   {
+    name: '登录',
     path: '/login',
     element: LazyLoad(Login, 'login')
   },
   {
+    name: 'Not Found',
     path: '*',
     element: <NotFound />
   }
-]
+] as RouteObject[] & TRoute[]
 
 export default createBrowserRouter(routerConfig)

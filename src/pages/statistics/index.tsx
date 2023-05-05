@@ -12,10 +12,10 @@ import {
 } from 'antd'
 import { getStatistics, getStatisticsTotalProfit } from '@/api/statistics'
 import { useRequest } from '@/hooks'
-import { useGetTheme } from '@/provider'
+import { useThemeStore } from '@/store'
 
 const Home: React.FC<any> = () => {
-  const theme = useGetTheme()
+  const theme = useThemeStore((state) => state.theme)
   const lineElementRef = useRef<HTMLDivElement | null>(null)
   const lineRef = useRef<Line | null>(null)
   const pieElementRef = useRef<HTMLDivElement | null>(null)
