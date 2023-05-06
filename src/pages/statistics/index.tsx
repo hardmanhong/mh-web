@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Line, Pie } from '@antv/g2plot'
+import { Area, Pie } from '@antv/g2plot'
 import {
   Card,
   Col,
@@ -16,10 +16,11 @@ import { useThemeStore } from '@/store'
 
 const Home: React.FC<any> = () => {
   const theme = useThemeStore((state) => state.theme)
-  const lineElementRef = useRef<HTMLDivElement | null>(null)
-  const lineRef = useRef<Line | null>(null)
-  const pieElementRef = useRef<HTMLDivElement | null>(null)
+  const areaRef = useRef<Area | null>(null)
+  const areaElementRef = useRef<HTMLDivElement | null>(null)
+
   const pieRef = useRef<Pie | null>(null)
+  const pieElementRef = useRef<HTMLDivElement | null>(null)
   const [type, setType] = useState('day')
   const { data: totalProfit } = useRequest(getStatisticsTotalProfit, {
     defaultData: 0
@@ -33,15 +34,21 @@ const Home: React.FC<any> = () => {
     defaultData: []
   })
   useEffect(() => {
-    if (lineElementRef.current) {
-      lineRef.current = new Line(lineElementRef.current, {
+    if (areaElementRef.current) {
+      areaRef.current = new Area(areaElementRef.current, {
         theme,
         data: [],
         xField: 'label',
         yField: 'value',
-        seriesField: 'type'
+        seriesField: 'type',
+        smooth: true,
+        areaStyle: () => {
+          return {
+            fillOpacity: 0.5
+          }
+        }
       })
-      lineRef.current.render()
+      areaRef.current.render()
     }
     if (pieElementRef.current) {
       const data = [
@@ -70,16 +77,16 @@ const Home: React.FC<any> = () => {
     }
   }, [])
   useEffect(() => {
-    if (lineRef.current) {
-      lineRef.current.update({ theme })
+    if (areaRef.current) {
+      areaRef.current.update({ theme })
     }
     if (pieRef.current) {
       pieRef.current.update({ theme })
     }
   }, [theme])
   useEffect(() => {
-    if (lineRef.current) {
-      lineRef.current.update({
+    if (areaRef.current) {
+      areaRef.current.update({
         data: profit
       })
     }
@@ -117,15 +124,10 @@ const Home: React.FC<any> = () => {
                     </Radio.Group>
                   }
                 >
-                  <div ref={lineElementRef}></div>
+                  <div ref={areaElementRef}></div>
                 </Card>
               </Spin>
             </Col>
-            {/* <Col span={12}>
-              <Card title='卖出' extra={<DatePicker.RangePicker />}>
-                <div ref={pieElementRef}></div>
-              </Card>
-            </Col> */}
           </Row>
         </div>
       </Space>

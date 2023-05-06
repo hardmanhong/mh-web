@@ -9,7 +9,7 @@ import './style.less'
 const { Header } = Layout
 
 const U2Header: React.FC = () => {
-  const username = window.sessionStorage.getItem('name')
+  const username = window.sessionStorage.getItem('username')
   const navigate = useNavigate()
   const onLogout = () => {
     window.sessionStorage.clear()
