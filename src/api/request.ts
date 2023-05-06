@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { EVENT, eventEmitter } from '@/utils'
+import router from '../router'
 
 const request = axios.create({
   baseURL: 'http://127.0.0.1:9000/api',
@@ -26,12 +27,12 @@ const handleResponse = (response: AxiosResponse<any, any>) => {
     if (code === 200) {
       return Promise.resolve(data?.data)
     } else {
-      if (config.headers && config.headers.catchCode) {
-        return Promise.resolve(data)
-      } else {
-        eventEmitter.emit(EVENT.REQUEST_ERROR, apiMessage || '操作失败')
-        return Promise.reject(data)
+      eventEmitter.emit(EVENT.REQUEST_ERROR, apiMessage || '操作失败')
+      if (code === 401) {
+        router.navigate('/login')
+        window.sessionStorage.clear()
       }
+      return Promise.reject(data)
     }
   } else {
     eventEmitter.emit(EVENT.REQUEST_ERROR, '网络不佳，稍后再试')

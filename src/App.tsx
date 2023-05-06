@@ -3,7 +3,7 @@ import { RouterProvider } from 'react-router-dom'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import { MessgaeProvider } from './provider'
-import routes from './router'
+import router from './router'
 import { useThemeStore } from './store'
 import { DARK_THEME, LIGHT_THEME } from './store/theme'
 
@@ -21,7 +21,7 @@ function App() {
       }}
     >
       <MessgaeProvider>
-        <RouterProvider router={routes}></RouterProvider>
+        <RouterProvider router={router}></RouterProvider>
       </MessgaeProvider>
     </ConfigProvider>
   )
