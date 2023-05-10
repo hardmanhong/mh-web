@@ -91,8 +91,10 @@ request.interceptors.response.use(
   }
 )
 
-const enhancedGet = (url: string, params?: { [key: string]: any }) =>
-  request.get(url, { params })
+const enhancedGet: typeof request.get = (
+  url: string,
+  params?: { [key: string]: any }
+) => request.get(url, { params })
 
 export default {
   get: enhancedGet,

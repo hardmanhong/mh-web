@@ -10,7 +10,7 @@ interface ITab {
   path: string
   search?: string
   closable: boolean
-  element: React.ReactNode
+  element?: React.ReactNode
 }
 
 type State = {
@@ -23,16 +23,31 @@ type Action = {
   setTabs: (tabs: ITab[]) => void
 }
 
+const TABS_KEYS = 'U2_TABS_KEYS'
+
+const initTabs = (): ITab[] => {
+  const storeTabs = window.localStorage.getItem(TABS_KEYS)
+  return storeTabs
+    ? JSON.parse(storeTabs)
+    : [
+        {
+          key: '/',
+          path: '/',
+          label: '看板',
+          closable: false,
+          element: LazyLoad(Statistics, 'statistics')
+        }
+      ]
+}
+const setTabsStore = (tabs: ITab[]) => {
+  const storeTabs = JSON.stringify(
+    tabs.map(({ element, ...item }) => ({ ...item }))
+  )
+  window.localStorage.setItem(TABS_KEYS, storeTabs)
+}
+
 const useTabsStore = create<State & Action>((set) => ({
-  tabs: [
-    {
-      key: '/',
-      path: '/',
-      label: '看板',
-      closable: false,
-      element: LazyLoad(Statistics, 'statistics')
-    }
-  ],
+  tabs: initTabs(),
   activeTab: '/',
   setActiveTab: (key: string) => set({ activeTab: key }),
   removeTab: (key: string) =>
@@ -45,7 +60,10 @@ const useTabsStore = create<State & Action>((set) => ({
       }
       return { tabs: state.tabs.filter((item) => item.key !== key) }
     }),
-  setTabs: (tabs: ITab[]) => set({ tabs })
+  setTabs: (tabs: ITab[]) => {
+    setTabsStore(tabs)
+    return set({ tabs })
+  }
 }))
 
 export default useTabsStore

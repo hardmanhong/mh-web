@@ -1,56 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import {
-  AccountBookOutlined,
-  AppstoreOutlined,
-  HomeOutlined
-} from '@ant-design/icons'
 import { Layout } from 'antd'
 import { useBoolean } from '@/hooks'
+import { routerConfig } from '@/router'
 import { U2Content, U2Header, U2Menu, U2Silder } from './components'
 import './style.less'
 import { IProps } from './types'
-import { genBreadcrumbMap, getOpenMenuKeys, getSelectedMenuKeys } from './utils'
+import {
+  genMenuData,
+  generateRoutesMap,
+  getOpenMenuKeys,
+  getSelectedMenuKeys
+} from './utils'
 
-const menus = [
-  {
-    name: '看板',
-    icon: <HomeOutlined />,
-    path: '/'
-  },
-  {
-    name: '商品',
-    icon: <AppstoreOutlined />,
-    path: '/goods'
-  },
-  {
-    name: '买卖',
-    icon: <AccountBookOutlined />,
-    path: '/trade'
-  }
-  // {
-  //   name: 'test-list',
-  //   icon: <HomeOutlined />,
-  //   path: '/test'
-  // },
-  // {
-  //   name: 'test-detail',
-  //   icon: <HomeOutlined />,
-  //   path: '/test/2'
-  // },
-  // {
-  //   name: 'test-record',
-  //   icon: <HomeOutlined />,
-  //   path: '/test/record'
-  // }
-]
+const getMenuItems = (menus: any[]): any[] =>
+  menus.map((item) => ({
+    key: item.path,
+    icon: item.icon,
+    label: <Link to={item.path}>{item.name}</Link>,
+    children: item.children?.length ? getMenuItems(item.children) : undefined
+  }))
 const U2Layout: React.FC<IProps> = () => {
+  const menus = genMenuData('/', routerConfig[0].children as any[])
   const location = useLocation()
   const [collapsed, setCollapsed] = useBoolean(false)
   const [openKeys, setOpenKeys] = useState<any[]>([])
   const [selectedKeys, setSelectedKeys] = useState<any[]>([])
   useEffect(() => {
-    genBreadcrumbMap(menus)
+    generateRoutesMap('', routerConfig)
   }, [])
   useEffect(() => {
     const selectedMenuKeys = getSelectedMenuKeys(location.pathname)
@@ -59,11 +36,7 @@ const U2Layout: React.FC<IProps> = () => {
     setSelectedKeys(selectedMenuKeys)
   }, [location])
   const menuProps = {
-    items: menus.map((item) => ({
-      key: item.path,
-      icon: item.icon,
-      label: <Link to={item.path}>{item.name}</Link>
-    })),
+    items: getMenuItems(menus),
     openKeys,
     selectedKeys,
     onOpenChange: setOpenKeys

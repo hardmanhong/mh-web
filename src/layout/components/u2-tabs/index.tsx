@@ -17,7 +17,8 @@ const U2Tabs: React.FC<{}> = () => {
     if (layout === 'tabs') {
       const fullPath = pathname + search
       const route = getRouteByPath(pathname)
-      if (!tabs.map((item) => item.key).includes(fullPath)) {
+      const find = tabs.find((item) => item.key === fullPath)
+      if (!find) {
         const nTabs = [
           ...tabs,
           {
@@ -30,6 +31,9 @@ const U2Tabs: React.FC<{}> = () => {
           }
         ]
         setTabs(nTabs)
+      } else if (find && !find.element) {
+        find.element = route.element
+        setTabs(tabs)
       }
       setActiveTab(fullPath)
     }

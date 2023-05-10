@@ -1,6 +1,13 @@
 import { lazy } from 'react'
 import type { RouteObject } from 'react-router-dom'
 import { createBrowserRouter } from 'react-router-dom'
+import {
+  AccountBookOutlined,
+  AppstoreOutlined,
+  HomeOutlined,
+  TeamOutlined,
+  ToolOutlined
+} from '@ant-design/icons'
 import { ErrorBoundary, LazyLoad } from '@/components'
 import Layout from '@/layout'
 import Login from '@/pages/login'
@@ -15,6 +22,11 @@ const TestRecord = lazy(() => import('@/pages/test/record'))
 const TestDetail = lazy(() => import('@/pages/test/detail'))
 const Trade = lazy(() => import('@/pages/trade'))
 const Goods = lazy(() => import('@/pages/goods'))
+const Info = lazy(() => import('@/pages/info'))
+const Tools = lazy(() => import('@/pages/tools'))
+const CharacterDetail = lazy(
+  () => import('@/pages/info/components/character/detail')
+)
 
 export interface UserInfo {
   name: string
@@ -54,9 +66,12 @@ const rootLoader = async () => {
 }
 export type TRoute = RouteObject & {
   name: string
+  path: string
+  icon?: string
+  hideMenu?: boolean
   children?: TRoute[]
 }
-export const routerConfig: TRoute[] = [
+export const routerConfig: RouteObject[] & TRoute[] = [
   {
     name: '看板',
     path: '/',
@@ -67,20 +82,48 @@ export const routerConfig: TRoute[] = [
     children: [
       {
         name: '看板',
-        path: '/',
+        path: '',
+        icon: <HomeOutlined />,
         element: LazyLoad(Statistics, 'statistics')
       },
       {
         name: '买卖',
-        path: '/trade',
+        path: 'trade',
+        icon: <AppstoreOutlined />,
         element: LazyLoad(Trade, 'trade')
       },
       {
         name: '商品',
-        path: '/goods',
+        path: 'goods',
+        icon: <AccountBookOutlined />,
         element: LazyLoad(Goods, 'goods')
       },
       {
+        name: '信息',
+        path: 'info',
+        icon: <TeamOutlined />,
+        element: LazyLoad(Info, 'info')
+      },
+      {
+        name: '信息',
+        path: 'info/character',
+        hideMenu: true,
+        children: [
+          {
+            path: ':id',
+            name: '角色详情',
+            element: LazyLoad(CharacterDetail, 'character-detail')
+          }
+        ]
+      },
+      {
+        name: '工具',
+        path: 'tools',
+        icon: <ToolOutlined />,
+        element: LazyLoad(Tools, 'tools')
+      },
+      {
+        hideMenu: true,
         name: 'Not Found',
         path: '*',
         element: <NotFound />
