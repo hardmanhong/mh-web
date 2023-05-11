@@ -8,7 +8,15 @@ import './style.less'
 import { getRouteByPath } from './utils'
 
 const U2Tabs: React.FC<{}> = () => {
-  const { tabs, activeTab, setActiveTab, removeTab, setTabs } = useTabsStore()
+  const {
+    tabs,
+    activeTab,
+    needReload,
+    setActiveTab,
+    removeTab,
+    setTabs,
+    setNeedReload
+  } = useTabsStore()
   const layout = useLayoutStore((state) => state.layout)
   const navigate = useNavigate()
   const { pathname, search } = useLocation()
@@ -36,8 +44,12 @@ const U2Tabs: React.FC<{}> = () => {
         setTabs(tabs)
       }
       setActiveTab(fullPath)
+      if (needReload) {
+        onRefresh()
+        setNeedReload(false)
+      }
     }
-  }, [pathname, search])
+  }, [pathname, search, needReload])
   const onRefresh = () => {
     toggleIsReload(true)
     setTimeout(() => {

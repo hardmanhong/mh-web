@@ -16,11 +16,13 @@ interface ITab {
 type State = {
   tabs: ITab[]
   activeTab: string
+  needReload: boolean
 }
 type Action = {
   removeTab: (key: string) => void
   setActiveTab: (key: string) => void
   setTabs: (tabs: ITab[]) => void
+  setNeedReload: (needReload: boolean) => void
 }
 
 const TABS_KEYS = 'U2_TABS_KEYS'
@@ -48,8 +50,10 @@ const setTabsStore = (tabs: ITab[]) => {
 
 const useTabsStore = create<State & Action>((set) => ({
   tabs: initTabs(),
+  needReload: false,
   activeTab: '/',
   setActiveTab: (key: string) => set({ activeTab: key }),
+  setNeedReload: (needReload: boolean) => set({ needReload }),
   removeTab: (key: string) =>
     set((state) => {
       const nTabs = state.tabs.filter((item) => item.key !== key)

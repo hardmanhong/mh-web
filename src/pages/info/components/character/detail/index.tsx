@@ -6,6 +6,7 @@ import { createCharacter, getCharacter, updateCharacter } from '@/api/character'
 import { SelectFilter, ZForm } from '@/components'
 import { useRequest } from '@/hooks'
 import { useMessage } from '@/provider'
+import { useTabsStore } from '@/store'
 import { formPropsEquipmentFn, formPropsInfoFn, formPropsPetFn } from './data'
 import { IProps } from './types'
 
@@ -26,6 +27,8 @@ const CharacterDetail: React.FC<IProps> = () => {
   const { data: accountList } = useRequest(getAccountList, {
     defaultData: { list: [] }
   })
+  const { setNeedReload } = useTabsStore()
+
   useEffect(() => {
     if (isEdit) {
       run({ id: params.id }).then((res) => {
@@ -39,11 +42,13 @@ const CharacterDetail: React.FC<IProps> = () => {
         createCharacter(values).then(() => {
           message.success('创建成功')
           navigate('/info')
+          setNeedReload(true)
         })
       } else if (isEdit) {
         updateCharacter(params.id as string, values).then(() => {
           message.success('编辑成功')
           navigate('/info')
+          setNeedReload(true)
         })
       }
     })
