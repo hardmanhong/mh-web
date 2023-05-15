@@ -24,7 +24,7 @@ const ZForm: React.FC<IZFormProps> = ({
   }
   const formPropsWithDetail: FormProps = {
     labelAlign: 'right',
-    labelCol: { flex: '110px' },
+    labelCol: { flex: '80px' },
     labelWrap: true
   }
   const rowPropsWithList: RowProps = {
@@ -32,7 +32,7 @@ const ZForm: React.FC<IZFormProps> = ({
     ...rowProps
   }
   const rowPropsWithDetail: RowProps = {
-    gutter: 32,
+    gutter: 16,
     ...rowProps
   }
 

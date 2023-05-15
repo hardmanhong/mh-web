@@ -162,33 +162,41 @@ export const formPropsEquipmentFn = () => {
   }
 }
 
-export const formPropsPetFn = () => {
+export const formPropsPetFn = (index: number) => {
   const list: IZFormItemProps[] = [
     {
+      colProps: { span: 0 },
       props: {
-        name: ['pet', 'name'],
+        noStyle: true,
+        name: ['pets', index, 'id']
+      },
+      component: null
+    },
+    {
+      props: {
+        name: ['pets', index, 'name'],
         label: '名称'
       },
       component: <Input />
     },
     {
       props: {
-        name: ['pet', 'price'],
+        name: ['pets', index, 'price'],
         label: '价格'
       },
       component: <Input />
     },
     {
       props: {
-        name: ['pet', 'level'],
+        name: ['pets', index, 'level'],
         label: '等级'
       },
       component: <Input />
     },
     {
-      colProps: { span: 16 },
+      colProps: { span: 24 },
       props: {
-        name: ['pet', 'remark'],
+        name: ['pets', index, 'remark'],
         label: '备注'
       },
       component: <Input.TextArea />

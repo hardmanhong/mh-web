@@ -1,6 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Button, Card, Form, Space, Spin } from 'antd'
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  FormInstance,
+  Row,
+  Space,
+  Spin,
+  Typography
+} from 'antd'
+import { uniqueId } from 'lodash-es'
 import { getAccountList } from '@/api/account'
 import { createCharacter, getCharacter, updateCharacter } from '@/api/character'
 import { SelectFilter, ZForm } from '@/components'
@@ -8,7 +19,12 @@ import { useRequest } from '@/hooks'
 import { useMessage } from '@/provider'
 import { useTabsStore } from '@/store'
 import { formPropsEquipmentFn, formPropsInfoFn, formPropsPetFn } from './data'
-import { IProps } from './types'
+import { IPet, IProps } from './types'
+
+const Pet = ({ form, index }: { form: FormInstance; index: number }) => {
+  const formPropsPet = formPropsPetFn(index)
+  return <ZForm {...formPropsPet} form={form} />
+}
 
 const CharacterDetail: React.FC<IProps> = () => {
   const message = useMessage()
@@ -28,10 +44,14 @@ const CharacterDetail: React.FC<IProps> = () => {
     defaultData: { list: [] }
   })
   const { setNeedReload } = useTabsStore()
+  const [pets, setPets] = useState<IPet[]>([])
 
   useEffect(() => {
     if (isEdit) {
       run({ id: params.id }).then((res) => {
+        if (Array.isArray(res.pets)) {
+          setPets(res.pets.map(() => ({ uid: uniqueId() })))
+        }
         form.setFieldsValue(res)
       })
     }
@@ -53,9 +73,25 @@ const CharacterDetail: React.FC<IProps> = () => {
       }
     })
   }
+  const onAddPet = () => {
+    const fPets = form.getFieldValue('pets')
+    fPets.push({})
+    form.setFieldsValue({
+      data: [...fPets]
+    })
+    const pet = { _uid: uniqueId() }
+    setPets((l) => [...l, pet])
+  }
+  const onDeletePet = (record: IPet, index: number) => {
+    const nList = pets.filter((item) => item._uid !== record._uid)
+    const fPets = form.getFieldValue('pets')
+    form.setFieldsValue({
+      pets: (fPets || []).filter((_: any, i: number) => i !== index)
+    })
+    setPets(nList)
+  }
   const formPropsInfo = formPropsInfoFn()
   const formPropsEquipment = formPropsEquipmentFn()
-  const formPropsPet = formPropsPetFn()
 
   return (
     <div className='page-character-detail'>
@@ -113,8 +149,38 @@ const CharacterDetail: React.FC<IProps> = () => {
             <Card title='装备' type='inner' size='small'>
               <ZForm {...formPropsEquipment} form={form} />
             </Card>
-            <Card title='宠物' type='inner' size='small'>
-              <ZForm {...formPropsPet} form={form} />
+            <Card
+              title='宠物'
+              type='inner'
+              size='small'
+              extra={
+                <a target='#' onClick={onAddPet}>
+                  添加
+                </a>
+              }
+            >
+              <Row gutter={[16, 16]}>
+                {pets.map((pet, index) => (
+                  <Col key={pet._uid} span={12}>
+                    <Card
+                      type='inner'
+                      size='small'
+                      extra={
+                        <Typography.Link
+                          type='danger'
+                          onClick={() => {
+                            onDeletePet(pet, index)
+                          }}
+                        >
+                          删除
+                        </Typography.Link>
+                      }
+                    >
+                      <Pet form={form} index={index} />
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
             </Card>
           </Space>
         </Card>
