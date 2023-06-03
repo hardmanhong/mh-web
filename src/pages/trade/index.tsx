@@ -40,7 +40,7 @@ type TEditBuy = {
 const Trade: React.FC<IProps> = () => {
   const message = useMessage()
   const [form] = Form.useForm()
-  const { data, tableProps, paginationProps, onSearch, run } =
+  const { loading, data, tableProps, paginationProps, onSearch, run } =
     usePaginated(getTradeBuyList)
   const {
     data: { list: goodsList = [] },
@@ -203,7 +203,12 @@ const Trade: React.FC<IProps> = () => {
       onSearch(params)
     }
   }
-  const tableStaticProps = tableStaticPropsFn({ onEdit, onSell, onDelete })
+  const tableStaticProps = tableStaticPropsFn({
+    loading,
+    onEdit,
+    onSell,
+    onDelete
+  })
   const formProps = formPropsFn(goodsList)
   return (
     <PageList

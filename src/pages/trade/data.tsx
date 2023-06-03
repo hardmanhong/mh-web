@@ -38,15 +38,17 @@ export const formPropsFn = (goodsList: any[]) => {
 }
 
 export const tableStaticPropsFn = ({
+  loading,
   onEdit,
   onSell,
   onDelete
 }: {
+  loading: boolean
   onEdit: (record: any) => void
   onSell: (record: any) => void
   onDelete: (record: any) => void
 }) => {
-  const [height] = useTableScroll()
+  const [height] = useTableScroll(loading)
   const columns: any[] = [
     {
       sorter: true,

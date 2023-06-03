@@ -21,13 +21,15 @@ export const formPropsFn = () => {
 }
 
 export const tableStaticPropsFn = ({
+  loading,
   onEdit,
   onDelete
 }: {
+  loading: boolean
   onEdit: (record: any) => void
   onDelete: (record: any) => void
 }) => {
-  const [height] = useTableScroll()
+  const [height] = useTableScroll(loading)
   const columns: any[] = [
     {
       title: 'ID',

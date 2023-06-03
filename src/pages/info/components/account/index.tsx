@@ -51,7 +51,7 @@ const Account: React.FC<IProps> = () => {
       })
     }
   }
-  const tableStaticProps = tableStaticPropsFn({ onEdit })
+  const tableStaticProps = tableStaticPropsFn({ loading, onEdit })
   return (
     <PageList
       table={
