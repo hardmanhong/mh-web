@@ -6,7 +6,6 @@ import {
   SorterResult,
   TablePaginationConfig
 } from 'antd/lib/table/interface'
-import dayjs from 'dayjs'
 import { createGoods, getGoodsList } from '@/api/goods'
 import {
   TTradeBuy,
@@ -217,13 +216,7 @@ const Trade: React.FC<IProps> = () => {
         <PageList.Search
           left={
             <PageList.Search.Left>
-              <ZForm
-                {...formProps}
-                initialValues={{
-                  createdAt: [dayjs().subtract(29, 'days'), dayjs()]
-                }}
-                form={form}
-              ></ZForm>
+              <ZForm {...formProps} form={form}></ZForm>
             </PageList.Search.Left>
           }
           right={
