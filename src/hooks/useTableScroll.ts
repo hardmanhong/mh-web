@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTabsStore } from '@/store'
 
-type TusePaginatedScroll = () => [number | string, () => void]
-const usePaginatedScroll: TusePaginatedScroll = () => {
+type TUseTableScroll = (loading: boolean) => [number | string, () => void]
+const useTableScroll: TUseTableScroll = (loading) => {
   const activeTab = useTabsStore((state) => state.activeTab)
   const [height, setHeight] = useState<string | number>(0)
   const timer = useRef<ReturnType<typeof window.setTimeout>>()
@@ -25,8 +25,8 @@ const usePaginatedScroll: TusePaginatedScroll = () => {
     return () => {
       clearTimeout(timer.current)
     }
-  }, [])
+  }, [loading])
   return [height, computedHeight]
 }
 
-export default usePaginatedScroll
+export default useTableScroll

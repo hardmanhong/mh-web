@@ -6,7 +6,6 @@ import {
   SorterResult,
   TablePaginationConfig
 } from 'antd/lib/table/interface'
-import dayjs from 'dayjs'
 import { createGoods, getGoodsList } from '@/api/goods'
 import {
   TTradeBuy,
@@ -40,7 +39,7 @@ type TEditBuy = {
 const Trade: React.FC<IProps> = () => {
   const message = useMessage()
   const [form] = Form.useForm()
-  const { data, tableProps, paginationProps, onSearch, run } =
+  const { loading, data, tableProps, paginationProps, onSearch, run } =
     usePaginated(getTradeBuyList)
   const {
     data: { list: goodsList = [] },
@@ -203,7 +202,12 @@ const Trade: React.FC<IProps> = () => {
       onSearch(params)
     }
   }
-  const tableStaticProps = tableStaticPropsFn({ onEdit, onSell, onDelete })
+  const tableStaticProps = tableStaticPropsFn({
+    loading,
+    onEdit,
+    onSell,
+    onDelete
+  })
   const formProps = formPropsFn(goodsList)
   return (
     <PageList
@@ -212,13 +216,7 @@ const Trade: React.FC<IProps> = () => {
         <PageList.Search
           left={
             <PageList.Search.Left>
-              <ZForm
-                {...formProps}
-                initialValues={{
-                  createdAt: [dayjs().subtract(29, 'days'), dayjs()]
-                }}
-                form={form}
-              ></ZForm>
+              <ZForm {...formProps} form={form}></ZForm>
             </PageList.Search.Left>
           }
           right={

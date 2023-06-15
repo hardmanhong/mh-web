@@ -1,6 +1,6 @@
 import { DatePicker, Popconfirm, Space, Tag, Tooltip, Typography } from 'antd'
 import { SelectFilter } from '@/components'
-import { usePaginatedScroll } from '@/hooks'
+import { useTableScroll } from '@/hooks'
 import { computedScroll, formatDate } from '@/utils'
 
 const { RangePicker } = DatePicker
@@ -38,15 +38,17 @@ export const formPropsFn = (goodsList: any[]) => {
 }
 
 export const tableStaticPropsFn = ({
+  loading,
   onEdit,
   onSell,
   onDelete
 }: {
+  loading: boolean
   onEdit: (record: any) => void
   onSell: (record: any) => void
   onDelete: (record: any) => void
 }) => {
-  const [height] = usePaginatedScroll()
+  const [height] = useTableScroll(loading)
   const columns: any[] = [
     {
       sorter: true,

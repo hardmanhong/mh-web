@@ -1,15 +1,15 @@
-import { DatePicker, Space, Typography } from 'antd'
-import { usePaginatedScroll } from '@/hooks'
+import { Space, Typography } from 'antd'
+import { useTableScroll } from '@/hooks'
 import { computedScroll } from '@/utils'
 
-const { RangePicker } = DatePicker
-
 export const tableStaticPropsFn = ({
+  loading,
   onEdit
 }: {
+  loading: boolean
   onEdit: (record: any) => void
 }) => {
-  const [height] = usePaginatedScroll()
+  const [height] = useTableScroll(loading)
   const columns: any[] = [
     {
       title: 'ID',
