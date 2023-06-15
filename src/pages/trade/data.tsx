@@ -1,6 +1,6 @@
 import { DatePicker, Popconfirm, Space, Tag, Tooltip, Typography } from 'antd'
 import { SelectFilter } from '@/components'
-import { useTableScroll } from '@/hooks'
+import { usePaginatedScroll } from '@/hooks'
 import { computedScroll, formatDate } from '@/utils'
 
 const { RangePicker } = DatePicker
@@ -46,7 +46,7 @@ export const tableStaticPropsFn = ({
   onSell: (record: any) => void
   onDelete: (record: any) => void
 }) => {
-  const [height] = useTableScroll()
+  const [height] = usePaginatedScroll()
   const columns: any[] = [
     {
       sorter: true,

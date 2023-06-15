@@ -1,65 +1,93 @@
 import { useCallback, useEffect, useState } from 'react'
+import { message } from 'antd'
 
-export type TUseRequest = (
-  api: (params: any) => Promise<any>,
-  options?: {
-    params?: any
-    manual?: boolean
-    defaultData?: any
-    formatData?: (data: any) => any
-  }
-) => {
-  loading: boolean
-  params: any
-  data: any
-  run: (params?: any) => Promise<any>
+type FormatResult<Data, Res> = (res: Data) => Res
+
+export type Options<Params, Data> = {
+  params?: Params
+  defaultData?: Data
+  manual?: boolean
+  isShowError?: boolean
+  formatData?: FormatResult<Data, any>
+  onSuccess?: (res: Data) => void
 }
 
-const useRequest: TUseRequest = (api, options) => {
+export type ReturnResult<Params, Data> = {
+  loading: boolean
+  params: Params
+  data: Data
+  run(params?: Params): Promise<Data>
+  setData: React.Dispatch<React.SetStateAction<Data>>
+}
+
+export type ReturnResultFormat<Params, Data, Res> = Omit<
+  ReturnResult<Params, Data>,
+  'data' | 'setData'
+> & {
+  data: Res
+  setData: React.Dispatch<React.SetStateAction<Res>>
+}
+type FnReturn<Params, Data, T> = T extends {
+  formatData: (data: Data) => infer Res
+}
+  ? ReturnResultFormat<Params, Data, Res>
+  : ReturnResult<Params, Data>
+
+function useRequest<Params, Data, T extends Options<Params, Data>>(
+  api: (params: Params) => Promise<Data>,
+  options: T
+): FnReturn<Params, Data, T> {
+  const {
+    params: initialParams = {},
+    defaultData,
+    manual = false,
+    isShowError = true,
+    formatData,
+    onSuccess
+  } = options
+
   const [loading, setLoading] = useState(false)
-  const [params, setParams] = useState(options?.params)
-  const [data, setData] = useState(
-    typeof options?.formatData === 'function'
-      ? options?.formatData(options?.defaultData)
-      : options?.defaultData
-  )
-  const run = useCallback(
-    (nparams?: any) => {
-      const nextParams = {
-        ...options?.params,
-        ...params,
-        ...nparams
-      }
-      setParams(nextParams)
+  const [params, setParams] = useState(initialParams)
+  const [data, setData] = useState<Data>(defaultData as Data)
+
+  const request = useCallback(
+    (queryParams?: Params) => {
       setLoading(true)
-      return api(nextParams)
+      setParams((prevParams) => ({ ...prevParams, ...queryParams }))
+
+      return api({ ...initialParams, ...params, ...queryParams } as Params)
         .then((res) => {
-          if (typeof options?.formatData === 'function') {
-            setData(options?.formatData(res))
-          } else {
-            setData(res)
+          if (typeof onSuccess === 'function') {
+            onSuccess(res)
           }
           return res
         })
         .catch((err) => {
-          return Promise.reject(err)
+          if (typeof isShowError === 'undefined' || isShowError) {
+            message.error(err.errMsg)
+          }
+          return err
         })
         .finally(() => {
           setLoading(false)
         })
     },
-    [params]
+    [initialParams, params, api, formatData, onSuccess, isShowError]
   )
+
   useEffect(() => {
-    if (!options?.manual) {
-      run()
+    if (!manual) {
+      request()
     }
-  }, [options?.manual])
+  }, [manual, request])
+
   return {
     loading,
     params,
-    data,
-    run
-  }
+    data: typeof formatData === 'function' ? formatData(data) : data,
+    run: request,
+    setData
+  } as FnReturn<Params, Data, T>
 }
+
 export default useRequest

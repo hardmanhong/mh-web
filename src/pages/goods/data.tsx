@@ -1,5 +1,5 @@
 import { Input, Popconfirm, Space, Typography } from 'antd'
-import { useTableScroll } from '@/hooks'
+import { usePaginatedScroll } from '@/hooks'
 import { computedScroll } from '@/utils'
 
 export const formPropsFn = () => {
@@ -27,7 +27,7 @@ export const tableStaticPropsFn = ({
   onEdit: (record: any) => void
   onDelete: (record: any) => void
 }) => {
-  const [height] = useTableScroll()
+  const [height] = usePaginatedScroll()
   const columns: any[] = [
     {
       title: 'ID',

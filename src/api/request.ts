@@ -91,11 +91,15 @@ request.interceptors.response.use(
   }
 )
 
-const enhancedGet: typeof request.get = (
+type EnhancedGet = <T = any>(
   url: string,
-  params?: { [key: string]: any }
-) => request.get(url, { params })
+  params?: T,
+  config?: AxiosRequestConfig
+) => Promise<any>
 
+const enhancedGet: EnhancedGet = (url, params, config) => {
+  return axios.get(url, { params, ...config })
+}
 export default {
   get: enhancedGet,
   post: request.post,

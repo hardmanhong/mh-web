@@ -1,4 +1,5 @@
 import request from '../request'
+import { GetList } from '../type'
 
 export type TGoods = {
   id?: number
@@ -6,7 +7,8 @@ export type TGoods = {
   minPrice: number
   maxPrice: number
 }
-export const getGoodsList = (data?: any) => {
+
+export const getGoodsList: GetList = (data) => {
   return request.get('/goods', data)
 }
 
