@@ -2,6 +2,6 @@
 cd D:/code/mine/mh-web
 yarn start &
 
-cd D:/code/mine/goproject/src/mh-api
-go run main.go
+cd D:/code/mine/mh-api-nest
+yarn start
 
