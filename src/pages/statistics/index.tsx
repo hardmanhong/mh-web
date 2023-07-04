@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Area, Pie } from '@antv/g2plot'
+import { DualAxes, Pie } from '@antv/g2plot'
 import {
   Card,
   Col,
@@ -16,8 +16,8 @@ import { useThemeStore } from '@/store'
 
 const Home: React.FC<any> = () => {
   const theme = useThemeStore((state) => state.theme)
-  const areaRef = useRef<Area | null>(null)
-  const areaElementRef = useRef<HTMLDivElement | null>(null)
+  const plotRef = useRef<DualAxes | null>(null)
+  const plotElementRef = useRef<HTMLDivElement | null>(null)
 
   const pieRef = useRef<Pie | null>(null)
   const pieElementRef = useRef<HTMLDivElement | null>(null)
@@ -27,28 +27,40 @@ const Home: React.FC<any> = () => {
   })
   const {
     loading,
-    data: profit,
+    data: { buyList, sellList, profitList },
     run: fetchProfit
   } = useRequest(getStatistics, {
     params: { type },
-    defaultData: []
+    defaultData: {
+      buyList: [],
+      sellList: [],
+      profitList: []
+    }
   })
   useEffect(() => {
-    if (areaElementRef.current) {
-      areaRef.current = new Area(areaElementRef.current, {
-        theme,
-        data: [],
-        xField: 'label',
-        yField: 'value',
-        seriesField: 'type',
-        smooth: true,
-        areaStyle: () => {
-          return {
-            fillOpacity: 0.5
+    if (plotElementRef.current) {
+      plotRef.current = new DualAxes(plotElementRef.current, {
+        data: [[], []],
+        xField: 'date',
+        yField: ['value', 'value'],
+        geometryOptions: [
+          {
+            geometry: 'line',
+            seriesField: 'name',
+            smooth: true,
+            color: ({ name }) => {
+              return name === '买入' ? '#4D96FF' : '#FF6B6B'
+            }
+          },
+          {
+            geometry: 'column',
+            seriesField: 'name',
+            smooth: true,
+            color: '#6BCB77'
           }
-        }
+        ]
       })
-      areaRef.current.render()
+      plotRef.current.render()
     }
     if (pieElementRef.current) {
       const data = [
@@ -77,22 +89,21 @@ const Home: React.FC<any> = () => {
     }
   }, [])
   useEffect(() => {
-    if (areaRef.current) {
-      areaRef.current.update({ theme })
+    if (plotRef.current) {
+      plotRef.current.update({ theme })
     }
     if (pieRef.current) {
       pieRef.current.update({ theme })
     }
   }, [theme])
   useEffect(() => {
-    if (areaRef.current) {
-      areaRef.current.update({
-        data: profit
+    if (plotRef.current) {
+      plotRef.current.update({
+        data: [[...buyList, ...sellList], profitList]
       })
     }
-  }, [profit])
+  }, [buyList, sellList, profitList])
   const onDateTypeChange = (e: RadioChangeEvent) => {
-    console.log(`radio checked:${e.target.value}`)
     const value = e.target.value as 'day' | 'week' | 'month' | 'year'
     setType(value)
     fetchProfit({
@@ -124,7 +135,7 @@ const Home: React.FC<any> = () => {
                     </Radio.Group>
                   }
                 >
-                  <div ref={areaElementRef}></div>
+                  <div ref={plotElementRef}></div>
                 </Card>
               </Spin>
             </Col>

@@ -16,7 +16,7 @@ import { IProps } from './types'
 const Account: React.FC<IProps> = () => {
   const message = useMessage()
   const { loading, data, run } = useRequest(getAccountList, {
-    defaultData: { list: [] }
+    defaultData: []
   })
   const [modalEditProps, openModalEdit, closeModalEdit] =
     useModalPrpos<TAccount>({
@@ -64,7 +64,7 @@ const Account: React.FC<IProps> = () => {
           }
           {...tableStaticProps}
           loading={loading}
-          dataSource={data.list || []}
+          dataSource={data || []}
         />
       }
     >

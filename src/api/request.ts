@@ -3,7 +3,7 @@ import { EVENT, eventEmitter } from '@/utils'
 import router from '../router'
 
 const request = axios.create({
-  baseURL: 'http://127.0.0.1:9000/api',
+  baseURL: 'http://127.0.0.1:9000/v1',
   timeout: 30000
 })
 const addToken = (config: AxiosRequestConfig<any>) => {
@@ -19,7 +19,7 @@ const handleRequest = (config: AxiosRequestConfig<any>) => {
 const handleResponse = (response: AxiosResponse<any, any>) => {
   const { status, data, config } = response
   const { code, message: apiMessage } = data
-  if (status === 200) {
+  if ([200, 201, 204].includes(status)) {
     // 200 OK：表示请求已成功，服务器已成功返回所请求的数据。
     // 201 Created：表示请求已成功，服务器已创建一个新的资源。
     // 204 No Content：表示请求已成功，但服务器没有返回任何内容。
@@ -98,8 +98,9 @@ type EnhancedGet = <T = any>(
 ) => Promise<any>
 
 const enhancedGet: EnhancedGet = (url, params, config) => {
-  return axios.get(url, { params, ...config })
+  return request.get(url, { params, ...config })
 }
+
 export default {
   get: enhancedGet,
   post: request.post,

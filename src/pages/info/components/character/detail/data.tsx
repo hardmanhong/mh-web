@@ -164,14 +164,14 @@ export const formPropsEquipmentFn = () => {
 
 export const formPropsPetFn = (index: number) => {
   const list: IZFormItemProps[] = [
-    {
-      colProps: { span: 0 },
-      props: {
-        noStyle: true,
-        name: ['pets', index, 'id']
-      },
-      component: null
-    },
+    // {
+    //   colProps: { span: 0 },
+    //   props: {
+    //     noStyle: true,
+    //     name: ['pets', index, 'id']
+    //   },
+    //   component: null
+    // },
     {
       props: {
         name: ['pets', index, 'name'],

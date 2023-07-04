@@ -1,5 +1,6 @@
 import { DatePicker, Popconfirm, Space, Tag, Tooltip, Typography } from 'antd'
 import { SelectFilter } from '@/components'
+import RangPickerItem from '@/components/z-form/RangPickerItem'
 import { useTableScroll } from '@/hooks'
 import { computedScroll, formatDate } from '@/utils'
 
@@ -26,7 +27,14 @@ export const formPropsFn = (goodsList: any[]) => {
         name: 'createdAt',
         label: '创建时间'
       },
-      component: <RangePicker />
+      component: (
+        <RangPickerItem
+          name='startAt'
+          format={RangPickerItem.getFormat('endAt')}
+        >
+          <RangePicker />
+        </RangPickerItem>
+      )
     }
   ]
   return {
@@ -143,7 +151,7 @@ export const tableStaticPropsFn = ({
             卖出
           </Typography.Link>
           <Popconfirm
-            title={`你确定要删除${record.name}吗？`}
+            title='你确定要删除吗？'
             disabled={record.hasSold === 1}
             onConfirm={() => {
               onDelete(record)

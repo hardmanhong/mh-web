@@ -46,11 +46,11 @@ const config = merge(common, {
     open: false,
     hot: true,
     proxy: {
-      '/api': {
+      '/v1': {
         target: '',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/v1': ''
         }
       }
     }

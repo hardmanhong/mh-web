@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react'
-import { message } from 'antd'
 
 type FormatResult<Data, Res> = (res: Data) => Res
 
@@ -7,7 +6,6 @@ export type Options<Params, Data> = {
   params?: Params
   defaultData?: Data
   manual?: boolean
-  isShowError?: boolean
   formatData?: FormatResult<Data, any>
   onSuccess?: (res: Data) => void
 }
@@ -41,7 +39,6 @@ function useRequest<Params, Data, T extends Options<Params, Data>>(
     params: initialParams = {},
     defaultData,
     manual = false,
-    isShowError = true,
     formatData,
     onSuccess
   } = options
@@ -50,7 +47,7 @@ function useRequest<Params, Data, T extends Options<Params, Data>>(
   const [params, setParams] = useState(initialParams)
   const [data, setData] = useState<Data>(defaultData as Data)
 
-  const request = useCallback(
+  const run = useCallback(
     (queryParams?: Params) => {
       setLoading(true)
       setParams((prevParams) => ({ ...prevParams, ...queryParams }))
@@ -60,32 +57,30 @@ function useRequest<Params, Data, T extends Options<Params, Data>>(
           if (typeof onSuccess === 'function') {
             onSuccess(res)
           }
+          setData(res)
           return res
         })
         .catch((err) => {
-          if (typeof isShowError === 'undefined' || isShowError) {
-            message.error(err.errMsg)
-          }
-          return err
+          return Promise.reject(err)
         })
         .finally(() => {
           setLoading(false)
         })
     },
-    [initialParams, params, api, formatData, onSuccess, isShowError]
+    [initialParams, params]
   )
 
   useEffect(() => {
     if (!manual) {
-      request()
+      run()
     }
-  }, [manual, request])
+  }, [manual])
 
   return {
     loading,
     params,
     data: typeof formatData === 'function' ? formatData(data) : data,
-    run: request,
+    run,
     setData
   } as FnReturn<Params, Data, T>
 }

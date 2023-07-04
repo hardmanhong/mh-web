@@ -56,7 +56,7 @@ const CardItem = ({
       />
     ),
     equipment: <Equipment {...data?.equipment} />,
-    pet: <Pet {...data?.pet} />
+    pet: <Pet pets={data?.pets || []} />
   }
   return (
     <Card
@@ -92,11 +92,11 @@ const Character: React.FC<IProps> = () => {
   const navigate = useNavigate()
   const message = useMessage()
   const { loading, data, run } = useRequest(getCharacterList, {
-    defaultData: { list: [] }
+    defaultData: []
   })
 
   const onAdd = () => {
-    navigate('/info/character/add')
+    navigate('/info/character')
   }
   const onEdit = (record: any) => {
     navigate(`/info/character/${record.id}`)
@@ -118,9 +118,9 @@ const Character: React.FC<IProps> = () => {
           </Button>
         }
       >
-        {data.list.length > 0 ? (
+        {data.length > 0 ? (
           <Row gutter={[16, 16]}>
-            {((data.list || []) as TCharacter[]).map((item) => (
+            {((data || []) as TCharacter[]).map((item) => (
               <Col key={item.id} span={12}>
                 <CardItem
                   data={item}

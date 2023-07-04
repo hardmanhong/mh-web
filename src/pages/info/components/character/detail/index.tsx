@@ -31,23 +31,22 @@ const CharacterDetail: React.FC<IProps> = () => {
   const navigate = useNavigate()
   const [form] = Form.useForm()
   const params = useParams()
-  const isAdd = params.id === 'add'
   const isEdit = Number(params.id) > 0
 
   const { loading, data, run } = useRequest(getCharacter, {
     manual: true,
     params: {
-      id: params.id
+      id: params.id as string
     }
   })
   const { data: accountList } = useRequest(getAccountList, {
-    defaultData: { list: [] }
+    defaultData: []
   })
   const { setNeedReload } = useTabsStore()
   const [pets, setPets] = useState<IPet[]>([])
 
   useEffect(() => {
-    if (isEdit) {
+    if (isEdit && params.id) {
       run({ id: params.id }).then((res) => {
         if (Array.isArray(res.pets)) {
           setPets(res.pets.map(() => ({ uid: uniqueId() })))
@@ -57,16 +56,17 @@ const CharacterDetail: React.FC<IProps> = () => {
     }
   }, [params])
   const onSave = () => {
-    form.validateFields().then((values) => {
-      if (isAdd) {
-        createCharacter(values).then(() => {
-          message.success('创建成功')
+    form.validateFields().then(() => {
+      const values = form.getFieldsValue(true)
+      if (isEdit) {
+        updateCharacter(params.id as string, values).then(() => {
+          message.success('编辑成功')
           navigate('/info')
           setNeedReload(true)
         })
-      } else if (isEdit) {
-        updateCharacter(params.id as string, values).then(() => {
-          message.success('编辑成功')
+      } else {
+        createCharacter(values).then(() => {
+          message.success('创建成功')
           navigate('/info')
           setNeedReload(true)
         })
@@ -74,7 +74,7 @@ const CharacterDetail: React.FC<IProps> = () => {
     })
   }
   const onAddPet = () => {
-    const fPets = form.getFieldValue('pets')
+    const fPets = form.getFieldValue('pets') || []
     fPets.push({})
     form.setFieldsValue({
       data: [...fPets]
@@ -97,7 +97,7 @@ const CharacterDetail: React.FC<IProps> = () => {
     <div className='page-character-detail'>
       <Spin spinning={loading}>
         <Card
-          title={isAdd ? '创建角色' : '编辑角色'}
+          title={isEdit ? '编辑角色' : '创建角色'}
           extra={
             <Button type='primary' onClick={onSave}>
               保存
@@ -133,7 +133,7 @@ const CharacterDetail: React.FC<IProps> = () => {
                     },
                     component: (
                       <SelectFilter
-                        options={(accountList.list || []).map((item: any) => ({
+                        options={(accountList || []).map((item: any) => ({
                           value: item.id,
                           label: [item.name, item.server].join(' ')
                         }))}

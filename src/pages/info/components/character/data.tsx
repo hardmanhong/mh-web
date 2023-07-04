@@ -1,4 +1,4 @@
-import { Descriptions } from 'antd'
+import { Descriptions, Space } from 'antd'
 
 export const Info = (props: { [key: string]: any }) => {
   const items = [
@@ -93,7 +93,7 @@ export const Equipment = (props: { [key: string]: any }) => {
     </Descriptions>
   )
 }
-export const Pet = (props: { [key: string]: any }) => {
+export const Pet = ({ pets }: { pets: any[] }) => {
   const items = [
     {
       label: '名称',
@@ -114,12 +114,21 @@ export const Pet = (props: { [key: string]: any }) => {
     }
   ]
   return (
-    <Descriptions bordered size='small' column={2}>
-      {items.map((item) => (
-        <Descriptions.Item key={item.field} label={item.label}>
-          {props[item.field] || ''}
-        </Descriptions.Item>
+    <Space direction='vertical' style={{ width: '100%' }}>
+      {pets.map((pet) => (
+        <Descriptions key={pet.id} bordered size='small' column={2}>
+          {items.map((item) => (
+            <Descriptions.Item
+              key={item.field}
+              label={item.label}
+              labelStyle={{ width: 100 }}
+              contentStyle={{ width: 100 }}
+            >
+              {pet[item.field] || ''}
+            </Descriptions.Item>
+          ))}
+        </Descriptions>
       ))}
-    </Descriptions>
+    </Space>
   )
 }

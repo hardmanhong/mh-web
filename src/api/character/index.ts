@@ -3,9 +3,7 @@ import request from '../request'
 export type TCharacter = {
   id?: number
 }
-export const getCharacterList = (
-  data?: any
-): Promise<{ list: TCharacter[] }> => {
+export const getCharacterList = (data?: any): Promise<TCharacter[]> => {
   return request.get('/character', data)
 }
 

@@ -6,9 +6,9 @@ export type User = {
 }
 
 export const login = (data: User) => {
-  return request.post('/login', data)
+  return request.post('/user/login', data)
 }
 
 export const signup = (data: User) => {
-  return request.post('signup', data)
+  return request.post('/user/register', data)
 }

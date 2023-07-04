@@ -20,7 +20,7 @@ import {
 import { PageList, ZForm, ZPagination, ZTable } from '@/components'
 import { useModalPrpos, usePaginated, useRequest } from '@/hooks'
 import { useMessage } from '@/provider'
-import { formatDate, formatDateFieldsQuery } from '@/utils'
+import { formatDate } from '@/utils'
 import ModalEdit from './ModalEdit'
 import ModalSell from './ModalSell'
 import { formPropsFn, tableStaticPropsFn } from './data'
@@ -39,7 +39,7 @@ type TEditBuy = {
 const Trade: React.FC<IProps> = () => {
   const message = useMessage()
   const [form] = Form.useForm()
-  const { loading, data, tableProps, paginationProps, onSearch, run } =
+  const { loading, data, tableProps, paginationProps, onSearch } =
     usePaginated(getTradeBuyList)
   const {
     data: { list: goodsList = [] },
@@ -114,7 +114,10 @@ const Trade: React.FC<IProps> = () => {
   const onSellOk = (values: TTradeSell) => {
     const id = modalSellProps.data?.id
     if (id) {
-      updateTradeSell(id, values).then(() => {
+      updateTradeSell(id, {
+        ...values,
+        buyId: modalSellProps.data?.buyId
+      }).then(() => {
         closeModalSell()
         message.success('操作成功')
         onSearch()
@@ -133,74 +136,49 @@ const Trade: React.FC<IProps> = () => {
   const onEditSell = (buy: any, sell: any) => {
     openModalSell({
       goods: buy?.goods,
+      buyPrice: buy.price,
+      inventory: buy.inventory,
+      goodsId: buy?.goods?.id,
+      buyId: buy.id,
       ...sell
     })
   }
   const handleSearch = () => {
-    run({})
-      .then((res) => {
-        console.log('res', res)
-      })
-      .catch((err) => {
-        console.log('err', err)
-      })
-    const params = formatDateFieldsQuery(form.getFieldsValue(), [
-      {
-        field: 'createdAt',
-        fields: ['createdAtFrom', 'createdAtTo']
-      }
-    ])
-
-    onSearch(params)
+    onSearch(form.getFieldsValue())
   }
   const onTableChange = (
     pagination: TablePaginationConfig,
     filters: Record<string, FilterValue | null>,
     sorter: SorterResult<any> | SorterResult<any>[]
   ) => {
-    console.log('sorter', sorter)
+    const order: { [key: string]: 'asc' | 'desc' | null } = {}
     if ((sorter as SorterResult<any>).field) {
       sorter = sorter as SorterResult<any>
       if (sorter.field === 'in') {
-        onSearch({
-          inventorySorter: sorter.order
-            ? sorter.order === 'ascend'
-              ? 'asc'
-              : 'desc'
-            : null
-        })
+        order.inventory = sorter.order === 'ascend' ? 'asc' : 'desc'
       } else if (sorter.field === 'name') {
-        onSearch({
-          hasSoldSorter: sorter.order
-            ? sorter.order === 'ascend'
-              ? 'asc'
-              : 'desc'
-            : null
-        })
+        order.hasSold = sorter.order === 'ascend' ? 'asc' : 'desc'
       }
     } else if ((sorter as SorterResult<any>[]).length) {
       sorter = sorter as SorterResult<any>[]
-      const params: {
-        [key: string]: any
-      } = { inventorySorter: null, hasSoldSorter: null }
       sorter.forEach((item) => {
         if (item.field === 'in') {
-          params.inventorySorter = item.order
+          order.inventory = item.order
             ? item.order === 'ascend'
               ? 'asc'
               : 'desc'
             : null
         }
         if (item.field === 'name') {
-          params.hasSoldSorter = item.order
+          order.hasSold = item.order
             ? item.order === 'ascend'
               ? 'asc'
               : 'desc'
             : null
         }
       })
-      onSearch(params)
     }
+    onSearch({ order })
   }
   const tableStaticProps = tableStaticPropsFn({
     loading,
@@ -267,7 +245,7 @@ const Trade: React.FC<IProps> = () => {
                                 '每个盈利',
                                 item.profit,
                                 '万，利润',
-                                item.totalProfit,
+                                item.profit * item.quantity,
                                 '万'
                               ].join(' ')}
                             </div>

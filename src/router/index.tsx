@@ -110,6 +110,11 @@ export const routerConfig: RouteObject[] & TRoute[] = [
         hideMenu: true,
         children: [
           {
+            path: '',
+            name: '创建角色',
+            element: LazyLoad(CharacterDetail, 'character-detail')
+          },
+          {
             path: ':id',
             name: '角色详情',
             element: LazyLoad(CharacterDetail, 'character-detail')
