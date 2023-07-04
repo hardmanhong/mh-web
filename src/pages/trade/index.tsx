@@ -307,6 +307,8 @@ const Trade: React.FC<IProps> = () => {
               <div>{data?.totalAmount} 万</div>
               <Tag color='success'>利润</Tag>
               <div>{data?.totalProfit} 万</div>
+              <Tag color='error'>库存</Tag>
+              <div>{data?.totalInventory} 万</div>
             </Space>
           }
           {...paginationProps}

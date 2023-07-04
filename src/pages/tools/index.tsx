@@ -10,6 +10,17 @@ const Tools: React.FC<IProps> = () => {
       key: 'gem',
       label: '宝石计算',
       children: <Gem />
+    },
+    {
+      key: 'tool',
+      label: '工具箱',
+      children: (
+        <iframe
+          width='100%'
+          height='600px'
+          src='https://xyq.163.com/tools/index.html'
+        ></iframe>
+      )
     }
   ]
   return (
