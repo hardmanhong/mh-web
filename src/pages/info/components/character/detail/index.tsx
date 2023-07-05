@@ -79,14 +79,14 @@ const CharacterDetail: React.FC<IProps> = () => {
     form.setFieldsValue({
       data: [...fPets]
     })
-    const pet = { _uid: uniqueId() }
+    const pet = { uid: uniqueId() }
     setPets((l) => [...l, pet])
   }
   const onDeletePet = (record: IPet, index: number) => {
-    const nList = pets.filter((item) => item._uid !== record._uid)
-    const fPets = form.getFieldValue('pets')
+    const nList = pets.filter((item) => item.uid !== record.uid)
+    const fPets = form.getFieldValue('pets') || []
     form.setFieldsValue({
-      pets: (fPets || []).filter((_: any, i: number) => i !== index)
+      pets: fPets.filter((_: any, i: number) => i !== index)
     })
     setPets(nList)
   }
@@ -161,7 +161,7 @@ const CharacterDetail: React.FC<IProps> = () => {
             >
               <Row gutter={[16, 16]}>
                 {pets.map((pet, index) => (
-                  <Col key={pet._uid} span={12}>
+                  <Col key={pet.uid} span={12}>
                     <Card
                       type='inner'
                       size='small'

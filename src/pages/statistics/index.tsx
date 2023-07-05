@@ -10,9 +10,10 @@ import {
   Spin,
   Statistic
 } from 'antd'
-import { getStatistics, getStatisticsTotalProfit } from '@/api/statistics'
+import { getBusiness, getInventory, getStatistics } from '@/api/statistics'
 import { useRequest } from '@/hooks'
 import { useThemeStore } from '@/store'
+import './style.less'
 
 const Home: React.FC<any> = () => {
   const theme = useThemeStore((state) => state.theme)
@@ -22,14 +23,15 @@ const Home: React.FC<any> = () => {
   const pieRef = useRef<Pie | null>(null)
   const pieElementRef = useRef<HTMLDivElement | null>(null)
   const [type, setType] = useState('day')
-  const { data: totalProfit } = useRequest(getStatisticsTotalProfit, {
-    defaultData: 0
+  const { data: total } = useRequest(getStatistics, {
+    defaultData: { totalProfit: '0', totalInventory: '0' }
   })
+
   const {
     loading,
     data: { buyList, sellList, profitList },
     run: fetchProfit
-  } = useRequest(getStatistics, {
+  } = useRequest(getBusiness, {
     params: { type },
     defaultData: {
       buyList: [],
@@ -37,56 +39,77 @@ const Home: React.FC<any> = () => {
       profitList: []
     }
   })
-  useEffect(() => {
+
+  const { data: inventory } = useRequest(getInventory, {
+    defaultData: []
+  })
+  const initBusiness = () => {
+    if (plotRef.current) return
     if (plotElementRef.current) {
       plotRef.current = new DualAxes(plotElementRef.current, {
         data: [[], []],
         xField: 'date',
         yField: ['value', 'value'],
+        legend: {
+          itemHeight: 14
+        },
         geometryOptions: [
           {
             geometry: 'line',
             seriesField: 'name',
             smooth: true,
             color: ({ name }) => {
-              return name === '买入' ? '#4D96FF' : '#FF6B6B'
+              return name === '买入' ? '#FF0000' : '#00FF00'
             }
           },
           {
             geometry: 'column',
             seriesField: 'name',
             smooth: true,
-            color: '#6BCB77'
+
+            isStack: true,
+            columnWidthRatio: 0.4
           }
-        ]
+        ],
+        tooltip: {
+          formatter: (datum: any) => {
+            return { name: datum.name, value: datum.value + ' 万' }
+          }
+        }
       })
       plotRef.current.render()
     }
+  }
+  const initInventory = () => {
+    if (pieRef.current) return
     if (pieElementRef.current) {
-      const data = [
-        { type: '分类一', value: 27 },
-        { type: '分类二', value: 25 },
-        { type: '分类三', value: 18 },
-        { type: '分类四', value: 15 },
-        { type: '分类五', value: 10 },
-        { type: '其他', value: 5 }
-      ]
       pieRef.current = new Pie(pieElementRef.current, {
         theme,
         appendPadding: 10,
-        data,
-        angleField: 'value',
-        colorField: 'type',
+        data: [],
+        angleField: 'totalInventory',
+        colorField: 'goodsName',
         radius: 0.75,
         label: {
-          type: 'spider',
-          labelHeight: 28,
-          content: '{name}\n{percentage}'
+          type: 'outer',
+          content: '{name} {percentage}'
+        },
+        tooltip: {
+          formatter: (datum: any) => {
+            return {
+              name: datum.goodsName,
+              value: datum.totalInventory + ' 万'
+            }
+          }
         },
         interactions: [{ type: 'element-selected' }, { type: 'element-active' }]
       })
       pieRef.current.render()
     }
+  }
+  useEffect(() => {
+    initBusiness()
+    initInventory()
   }, [])
   useEffect(() => {
     if (plotRef.current) {
@@ -103,6 +126,11 @@ const Home: React.FC<any> = () => {
       })
     }
   }, [buyList, sellList, profitList])
+  useEffect(() => {
+    if (pieRef.current) {
+      pieRef.current.update({ data: inventory })
+    }
+  }, [inventory])
   const onDateTypeChange = (e: RadioChangeEvent) => {
     const value = e.target.value as 'day' | 'week' | 'month' | 'year'
     setType(value)
@@ -113,16 +141,21 @@ const Home: React.FC<any> = () => {
   return (
     <div className='page-statistics'>
       <Space direction='vertical' style={{ width: '100%' }}>
-        <Row>
-          <Col span={8}>
+        <Row gutter={8}>
+          <Col span={6}>
             <Card title={null}>
-              <Statistic title='总利润（万）' value={totalProfit} />
+              <Statistic title='总利润（万）' value={total.totalProfit} />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card title={null}>
+              <Statistic title='库存（万）' value={total.totalInventory} />
             </Card>
           </Col>
         </Row>
         <div className='charts'>
           <Row gutter={8}>
-            <Col span={24}>
+            <Col span={14}>
               <Spin spinning={loading}>
                 <Card
                   title='统计'
@@ -136,6 +169,13 @@ const Home: React.FC<any> = () => {
                   }
                 >
                   <div ref={plotElementRef}></div>
+                </Card>
+              </Spin>
+            </Col>
+            <Col span={10}>
+              <Spin spinning={loading}>
+                <Card title='库存占比'>
+                  <div ref={pieElementRef}></div>
                 </Card>
               </Spin>
             </Col>
