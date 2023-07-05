@@ -49,7 +49,7 @@ const Home: React.FC<any> = () => {
       plotRef.current = new DualAxes(plotElementRef.current, {
         data: [[], []],
         xField: 'date',
-        yField: ['value', 'value'],
+        yField: ['value', 'value', 'percantage'],
         legend: {
           itemHeight: 14
         },
@@ -66,14 +66,34 @@ const Home: React.FC<any> = () => {
             geometry: 'column',
             seriesField: 'name',
             smooth: true,
-
             isStack: true,
             columnWidthRatio: 0.4
           }
         ],
         tooltip: {
-          formatter: (datum: any) => {
-            return { name: datum.name, value: datum.value + ' 万' }
+          fields: ['date', 'name', 'value', 'percantage'],
+          position: 'left',
+          customItems: (originalItems: any[]) => {
+            // 防止显示过长
+            if (originalItems.length > 24) {
+              const buyAndSell = originalItems.filter((item) =>
+                ['买入', '卖出'].includes(item.name)
+              )
+              const sliceItems = originalItems
+                .filter((item) => !['买入', '卖出'].includes(item.name))
+                .sort((a, b) => b.data.value - a.data.value)
+                .slice(0, 24)
+              return [...sliceItems, ...buyAndSell]
+            }
+            return originalItems
+          },
+          formatter: (data: any) => {
+            console.log('formatter', data)
+            const { name, value, percantage } = data
+            return {
+              name: name,
+              value: value + ' 万 ' + (percantage ? percantage + '%' : '')
+            }
           }
         }
       })
@@ -92,13 +112,18 @@ const Home: React.FC<any> = () => {
         radius: 0.75,
         label: {
           type: 'outer',
-          content: '{name} {percentage}'
+          content: (data) => {
+            if (data.totalInventory > 100) {
+              return data.goodsName + `${data.totalInventory} 万`
+            }
+            return ''
+          }
         },
         tooltip: {
-          formatter: (datum: any) => {
+          formatter: (data: any) => {
             return {
-              name: datum.goodsName,
-              value: datum.totalInventory + ' 万'
+              name: data.goodsName,
+              value: data.totalInventory + ' 万'
             }
           }
         },
