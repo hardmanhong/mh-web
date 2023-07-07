@@ -25,7 +25,7 @@ const PageListFC: React.FC<IProps> = ({
             )}
           </div>
         )}
-        <Space direction='vertical'>
+        <Space direction='vertical' style={{ width: '100%' }}>
           {search && <div className='c-page-search'>{search}</div>}
           {table && <div className='c-page-table'>{table}</div>}
         </Space>

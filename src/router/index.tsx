@@ -2,14 +2,16 @@ import { lazy } from 'react'
 import type { RouteObject } from 'react-router-dom'
 import { createBrowserRouter } from 'react-router-dom'
 import {
-  AccountBookOutlined,
   AppstoreOutlined,
   HomeOutlined,
+  MoneyCollectOutlined,
+  ShopOutlined,
   TeamOutlined,
   ToolOutlined
 } from '@ant-design/icons'
 import { ErrorBoundary, LazyLoad } from '@/components'
 import Layout from '@/layout'
+import IncomeExpenses from '@/pages/income-expenses'
 import Login from '@/pages/login'
 import NotFound from '@/pages/not-found'
 
@@ -95,8 +97,14 @@ export const routerConfig: RouteObject[] & TRoute[] = [
       {
         name: '商品',
         path: 'goods',
-        icon: <AccountBookOutlined />,
+        icon: <ShopOutlined />,
         element: LazyLoad(Goods, 'goods')
+      },
+      {
+        name: '收支',
+        path: 'income-expenses',
+        icon: <MoneyCollectOutlined />,
+        element: LazyLoad(IncomeExpenses, 'IncomeExpenses')
       },
       {
         name: '信息',

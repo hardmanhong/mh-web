@@ -1,15 +1,18 @@
-import { useCallback, useState } from 'react';
-function useBoolean(initialValue?: boolean): [boolean, (value?: boolean) => void] {
-  const [state, setState] = useState<boolean>(initialValue || false);
+import { useCallback, useState } from 'react'
+
+function useBoolean(
+  initialValue?: boolean
+): [boolean, (value?: boolean) => void] {
+  const [state, setState] = useState<boolean>(initialValue || false)
 
   const toggle = useCallback((nextValue?: boolean): void => {
     if (typeof nextValue === 'boolean') {
-      setState(nextValue);
+      setState(nextValue)
     } else {
-      setState(s => !s);
+      setState((s) => !s)
     }
-  }, []);
-  return [state, toggle];
+  }, [])
+  return [state, toggle]
 }
 
-export default useBoolean;
+export default useBoolean

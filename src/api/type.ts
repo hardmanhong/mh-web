@@ -4,7 +4,7 @@ type PaginationParams = {
 }
 
 type PaginationData<T> = {
-  total: number
+  count: number
   list: T[]
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
-import { IProps } from './types'
 import './style.less'
+import { IProps } from './types'
 
 const U2Breadcrumb: React.FC<IProps> = () => {
   return <div></div>

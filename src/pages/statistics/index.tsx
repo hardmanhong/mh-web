@@ -40,9 +40,12 @@ const Home: React.FC<any> = () => {
     }
   })
 
-  const { data: inventory } = useRequest(getInventory, {
-    defaultData: []
-  })
+  const { loading: inventoryLoading, data: inventory } = useRequest(
+    getInventory,
+    {
+      defaultData: []
+    }
+  )
   const initBusiness = () => {
     if (plotRef.current) return
     if (plotElementRef.current) {
@@ -88,7 +91,6 @@ const Home: React.FC<any> = () => {
             return originalItems
           },
           formatter: (data: any) => {
-            console.log('formatter', data)
             const { name, value, percantage } = data
             return {
               name: name,
@@ -198,7 +200,7 @@ const Home: React.FC<any> = () => {
               </Spin>
             </Col>
             <Col span={10}>
-              <Spin spinning={loading}>
+              <Spin spinning={inventoryLoading}>
                 <Card title='库存占比'>
                   <div ref={pieElementRef}></div>
                 </Card>

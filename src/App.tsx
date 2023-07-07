@@ -10,6 +10,11 @@ import { DARK_THEME, LIGHT_THEME } from './store/theme'
 function App() {
   const { theme, setTheme } = useThemeStore()
   useEffect(() => {
+    const themeMedia = window.matchMedia('(prefers-color-scheme: dark)')
+    themeMedia.onchange = (e) => {
+      const isDark = e.matches
+      setTheme(isDark ? 'dark' : 'light')
+    }
     setTheme(theme)
   }, [])
   const themeToken = theme === 'light' ? LIGHT_THEME : DARK_THEME

@@ -49,7 +49,7 @@ const Trade: React.FC<IProps> = () => {
       page: 1,
       pageSize: 1000
     },
-    defaultData: { list: [], total: 0 }
+    defaultData: { list: [], count: 0 }
   })
   const [modalEditProps, openModalEdit, closeModalEdit] =
     useModalPrpos<TTradeBuy>({})

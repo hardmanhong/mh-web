@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import { IProps } from './types'
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { Layout } from 'antd'
 import './style.less'
+import { IProps } from './types'
 
 const width = 208
 const collapsedWidth = 48

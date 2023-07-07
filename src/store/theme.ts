@@ -88,8 +88,10 @@ type Action = {
 const useThemeStore = create<State & Action>((set) => ({
   theme: defaultValue as Theme,
   setTheme: (theme: Theme) =>
-    set(() => {
-      document.querySelector('body')!.className = theme
+    set(({ theme: prevTheme }) => {
+      const html = document.querySelector('html')
+      html!.classList.remove(prevTheme)
+      html!.classList.add(theme)
       window.localStorage.setItem(THEME_KEY, theme)
       return { theme }
     })

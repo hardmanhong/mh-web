@@ -32,7 +32,7 @@ const Login: React.FC<{
       <Form
         wrapperCol={{ span: 24 }}
         requiredMark={false}
-        initialValues={{ name: 'admin', password: '123456' }}
+        initialValues={{ name: 'admin', password: 'mh123456' }}
         onFinish={onLogin}
       >
         <Form.Item
