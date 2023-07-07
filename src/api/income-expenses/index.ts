@@ -11,7 +11,11 @@ export type TIncomeExpenses = {
   remark?: string
 }
 
-export const getIncomeExpensesList: GetList = (data) => {
+export const getIncomeExpensesList: GetList<
+  any,
+  any,
+  { income: number; expenses: number; surplus: number }
+> = (data) => {
   return request.get('/income-expenses', data)
 }
 

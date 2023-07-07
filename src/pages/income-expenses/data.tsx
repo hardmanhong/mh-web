@@ -1,7 +1,7 @@
 import { Popconfirm, Select, Space, Tag, Typography } from 'antd'
 import { SelectFilter } from '@/components'
 import { useTableScroll } from '@/hooks'
-import { computedScroll } from '@/utils'
+import { computedScroll, formatDate } from '@/utils'
 
 export const type = [
   {
@@ -74,11 +74,17 @@ export const tableStaticPropsFn = ({
     {
       title: '类型',
       dataIndex: 'type',
+      width: 100,
       render: (value: number) => (
-        <Tag color={value === 1 ? 'success' : 'error'}>
+        <Tag color={value === 1 ? 'success' : 'error'} bordered={false}>
           {type.find((item) => item.value === value)?.label}
         </Tag>
       )
+    },
+    {
+      title: '日期',
+      dataIndex: 'date',
+      render: (value: string) => formatDate(value, 'YYYY-MM-DD')
     },
     {
       title: '分类',
@@ -95,7 +101,7 @@ export const tableStaticPropsFn = ({
       dataIndex: 'remark'
     },
     {
-      width: 100,
+      width: 120,
       title: '操作',
       key: 'operation',
       dataIndex: 'operation',
@@ -110,7 +116,7 @@ export const tableStaticPropsFn = ({
             编辑
           </Typography.Link>
           <Popconfirm
-            title={`你确定要删除${record.name}吗？`}
+            title={`你确定要删除吗？`}
             onConfirm={() => {
               onDelete(record)
             }}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Space } from 'antd'
+import { Button, Form, Space, Tag } from 'antd'
 import dayjs from 'dayjs'
 import type { TIncomeExpenses } from '@/api/income-expenses'
 import {
@@ -18,7 +18,7 @@ import { IProps } from './types'
 const IncomeExpenses: React.FC<IProps> = () => {
   const message = useMessage()
   const [form] = Form.useForm()
-  const { loading, tableProps, paginationProps, onSearch } = usePaginated(
+  const { loading, data, tableProps, paginationProps, onSearch } = usePaginated(
     getIncomeExpensesList
   )
   const [modalEditProps, openModalEdit, closeModalEdit] =
@@ -103,7 +103,27 @@ const IncomeExpenses: React.FC<IProps> = () => {
           {...tableProps}
         />
       }
-      pagination={<ZPagination {...paginationProps} />}
+      pagination={
+        <ZPagination
+          {...paginationProps}
+          left={
+            <Space>
+              <Tag color='success' bordered={false}>
+                收入
+              </Tag>
+              <div>{data?.income || 0}</div>
+              <Tag color='error' bordered={false}>
+                支出
+              </Tag>
+              <div>{data?.expenses || 0}</div>
+              <Tag color='processing' bordered={false}>
+                结余
+              </Tag>
+              <div>{data?.surplus || 0}</div>
+            </Space>
+          }
+        />
+      }
     >
       <ModalEdit
         {...modalEditProps}
