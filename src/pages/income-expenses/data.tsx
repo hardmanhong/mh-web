@@ -82,11 +82,6 @@ export const tableStaticPropsFn = ({
       )
     },
     {
-      title: '日期',
-      dataIndex: 'date',
-      render: (value: string) => formatDate(value, 'YYYY-MM-DD')
-    },
-    {
       title: '分类',
       dataIndex: 'category',
       render: (value: number) =>
@@ -95,6 +90,11 @@ export const tableStaticPropsFn = ({
     {
       title: '金额',
       dataIndex: 'amount'
+    },
+    {
+      title: '日期',
+      dataIndex: 'date',
+      render: (value: string) => formatDate(value, 'YYYY-MM-DD')
     },
     {
       title: '备注',
