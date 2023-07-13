@@ -26,7 +26,7 @@ function usePaginated<Params, Data>(
   api: (params: PaginationParams<Params>) => Promise<PaginationData<Data>>,
   options?: PaginationOptions<PaginationParams<Params>, PaginationData<Data>>
 ): PaginationReturnResult<PaginationParams<Params>, PaginationData<Data>> {
-  const { defaultPageSize = 100 } = (options = { defaultPageSize: 100 })
+  const { defaultPageSize = 100 } = options || {}
   const { loading, data, params, run, ...ret } = useRequest(api, {
     ...options,
     params: {

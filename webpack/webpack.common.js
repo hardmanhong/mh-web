@@ -38,7 +38,19 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       title: '聚宝盆',
-      template: paths.appHtml
+      template: paths.appHtml,
+      css: [
+        'https://esm.sh/@wooorm/starry-night@2/style/both.css',
+        'https://esm.sh/github-markdown-css@5/github-markdown.css',
+        {
+          rel: 'prefetch',
+          href: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github.min.css'
+        },
+        {
+          rel: 'prefetch',
+          href: 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github-dark-dimmed.min.css'
+        }
+      ]
     })
   ],
   resolve: {

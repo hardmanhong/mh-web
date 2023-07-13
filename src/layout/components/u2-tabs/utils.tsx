@@ -28,10 +28,15 @@ export const getRouteByPath = (path = '/404') => {
   if (!Object.keys(routesMap).length) {
     generateRoutesMap('', routerConfig)
   }
-  const find = Object.keys(routesMap).find((key) => {
-    const fn = match(key, { decode: decodeURIComponent })
-    return fn(path)
-  })
+  let find
+  try {
+    find = Object.keys(routesMap).find((key) => {
+      const fn = match(key, { decode: decodeURIComponent })
+      return fn(path)
+    })
+  } catch (error) {
+    find = null
+  }
   const curRoute = find ? routesMap[find] : routesMap[path]
 
   if (curRoute && curRoute.element && !curRoute?.path) {

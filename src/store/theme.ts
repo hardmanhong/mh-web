@@ -84,7 +84,29 @@ type State = {
 type Action = {
   setTheme: (theme: Theme) => void
 }
-
+function toggleMarkdownStyle(theme: string) {
+  const href =
+    theme === 'light'
+      ? 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github.min.css'
+      : 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github-dark-dimmed.min.css'
+  const id = 'markdown'
+  const customTheme = document.querySelector<HTMLLinkElement>(`#${id}`)
+  if (customTheme) {
+    customTheme.href = href
+    return
+  }
+  const linkElement = document.createElement('link')
+  const attributes = {
+    type: 'text/css',
+    rel: 'stylesheet',
+    id,
+    href
+  }
+  for (const [attribute, value] of Object.entries(attributes)) {
+    linkElement.setAttribute(attribute, value)
+  }
+  document.head.appendChild(linkElement)
+}
 const useThemeStore = create<State & Action>((set) => ({
   theme: defaultValue as Theme,
   setTheme: (theme: Theme) =>
@@ -93,6 +115,7 @@ const useThemeStore = create<State & Action>((set) => ({
       html!.classList.remove(prevTheme)
       html!.classList.add(theme)
       window.localStorage.setItem(THEME_KEY, theme)
+      toggleMarkdownStyle(theme)
       return { theme }
     })
 }))

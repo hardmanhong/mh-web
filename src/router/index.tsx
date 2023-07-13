@@ -5,6 +5,7 @@ import {
   AppstoreOutlined,
   HomeOutlined,
   MoneyCollectOutlined,
+  ProjectOutlined,
   ShopOutlined,
   TeamOutlined,
   ToolOutlined
@@ -14,6 +15,8 @@ import Layout from '@/layout'
 import IncomeExpenses from '@/pages/income-expenses'
 import Login from '@/pages/login'
 import NotFound from '@/pages/not-found'
+import Post from '@/pages/post'
+import PostDetail from '@/pages/post/detail'
 
 // 不需要懒加载的页面组件
 
@@ -71,6 +74,7 @@ export type TRoute = RouteObject & {
   path: string
   icon?: string
   hideMenu?: boolean
+  hideChildrenMenu?: boolean
   children?: TRoute[]
 }
 export const routerConfig: RouteObject[] & TRoute[] = [
@@ -134,6 +138,29 @@ export const routerConfig: RouteObject[] & TRoute[] = [
         path: 'tools',
         icon: <ToolOutlined />,
         element: LazyLoad(Tools, 'tools')
+      },
+      {
+        name: '文章',
+        path: 'post',
+        icon: <ProjectOutlined />,
+        hideChildrenMenu: true,
+        children: [
+          {
+            path: '',
+            name: '文章',
+            element: LazyLoad(Post, 'post')
+          },
+          {
+            path: 'add',
+            name: '添加文章',
+            element: LazyLoad(PostDetail, 'post-add')
+          },
+          {
+            path: ':id',
+            name: '文章详情',
+            element: LazyLoad(PostDetail, 'post-detail')
+          }
+        ]
       },
       {
         hideMenu: true,

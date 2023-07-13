@@ -1,4 +1,5 @@
 .u2-tabs {
+  height: 100%;
   > .ant-tabs-nav {
     margin: 0;
     border-top-left-radius: 8px;
@@ -12,5 +13,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  > .ant-tabs-content-holder > .ant-tabs-content,
+  > .ant-tabs-content-holder > .ant-tabs-content > .ant-tabs-tabpane,
+  .content,
+  .content > div {
+    height: 100%;
   }
 }

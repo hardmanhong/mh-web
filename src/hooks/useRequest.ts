@@ -14,6 +14,7 @@ export type ReturnResult<Params, Data> = {
   loading: boolean
   params: Params
   data: Data
+  error: string
   run(params?: Params): Promise<Data>
   setData: React.Dispatch<React.SetStateAction<Data>>
 }
@@ -33,7 +34,7 @@ type FnReturn<Params, Data, T> = T extends {
 
 function useRequest<Params, Data, T extends Options<Params, Data>>(
   api: (params: Params) => Promise<Data>,
-  options: T
+  options?: T
 ): FnReturn<Params, Data, T> {
   const {
     params: initialParams = {},
@@ -41,11 +42,12 @@ function useRequest<Params, Data, T extends Options<Params, Data>>(
     manual = false,
     formatData,
     onSuccess
-  } = options
+  } = options || {}
 
   const [loading, setLoading] = useState(false)
   const [params, setParams] = useState(initialParams)
   const [data, setData] = useState<Data>(defaultData as Data)
+  const [error, setError] = useState('')
 
   const run = useCallback(
     (queryParams?: Params) => {
@@ -61,6 +63,7 @@ function useRequest<Params, Data, T extends Options<Params, Data>>(
           return res
         })
         .catch((err) => {
+          setError(err.message)
           return Promise.reject(err)
         })
         .finally(() => {
@@ -75,11 +78,11 @@ function useRequest<Params, Data, T extends Options<Params, Data>>(
       run()
     }
   }, [manual])
-
   return {
     loading,
     params,
     data: typeof formatData === 'function' ? formatData(data) : data,
+    error,
     run,
     setData
   } as FnReturn<Params, Data, T>

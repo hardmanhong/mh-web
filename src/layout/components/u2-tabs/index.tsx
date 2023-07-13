@@ -78,7 +78,6 @@ const U2Tabs: React.FC<{}> = () => {
     }
   }
   const fullPath = pathname + search
-
   return (
     <Tabs
       hideAdd
@@ -105,7 +104,10 @@ const U2Tabs: React.FC<{}> = () => {
           isReload && item.key === fullPath && item.key !== '/404' ? (
             <Spin tip='刷新中...' className='loading' />
           ) : (
-            <div id={item.key}>{item.element}</div>
+            // id 是用来做列表高度
+            <div id={item.key} className='content'>
+              {item.element}
+            </div>
           )
       }))}
     />
