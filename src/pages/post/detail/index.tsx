@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-// @ts-ignore
 import { Fragment, jsx, jsxs } from 'react/jsx-runtime'
 import { SaveOutlined } from '@ant-design/icons'
 import { createStarryNight } from '@wooorm/starry-night'
@@ -14,6 +13,7 @@ import { Anchor, Button, Col, Input, Row, Typography, message } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { toJsxRuntime } from 'hast-util-to-jsx-runtime'
+// @ts-ignore
 import { createPost, getPost, updatePost } from '@/api/post'
 import { Markdown } from '@/components'
 import { useBoolean, useRequest } from '@/hooks'
@@ -64,6 +64,7 @@ const Post: React.FC<IProps> = () => {
   useEffect(() => {
     if (params.id) {
       run().then((res) => {
+        setTitle(res.title)
         setText(res.content)
       })
     }
