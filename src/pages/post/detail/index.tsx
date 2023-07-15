@@ -48,6 +48,7 @@ const Post: React.FC<IProps> = () => {
     params: { id: params.id || '' }
   })
   const renderHighLight = (text: string) => {
+    if (!text) return
     if (starryNightRef.current) {
       const h = toJsxRuntime(
         starryNightRef.current.highlight(text, 'text.md'),

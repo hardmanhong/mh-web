@@ -35,8 +35,9 @@ const PostList: React.FC<{}> = () => {
     if (!hasMore) return
     params.page++
     run().then((res) => {
-      setList((list) => [...list, ...res.list])
-      if (list.length >= res.count) {
+      const nextList = [...list, ...res.list]
+      setList(nextList)
+      if (nextList.length >= res.count) {
         setHasMore(false)
       }
     })
@@ -48,18 +49,17 @@ const PostList: React.FC<{}> = () => {
   const onAdd = () => {
     navigate(`/post/add`)
   }
-  const onConfirm = (id: number) => {
+  const onRemove = (id: number) => {
     deletePost(id).then(() => {
       message.success('删除成功')
-      params.page = 1
-      run()
+      onSearch('')
     })
   }
   const onSearch = (value: string) => {
     params.page = 1
     run({ ...params, title: value }).then((res) => {
       setList(res.list)
-      if (list.length >= res.count) {
+      if (res.list.length >= res.count) {
         setHasMore(false)
       }
     })
@@ -105,7 +105,7 @@ const PostList: React.FC<{}> = () => {
                     description='确定要删除吗?'
                     onConfirm={(e) => {
                       e?.preventDefault()
-                      onConfirm(item.id)
+                      onRemove(item.id)
                     }}
                     onCancel={(e) => {
                       e?.preventDefault()
