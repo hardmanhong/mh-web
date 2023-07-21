@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import router from '@/router'
 import { EVENT, eventEmitter } from '@/utils'
-import router from '../router'
 
-const request = axios.create({
+const AXIOS_INSTANCE = axios.create({
   baseURL: 'http://127.0.0.1:9000/v1',
   timeout: 30000
 })
@@ -64,7 +64,7 @@ const handleResponseError = (error: any) => {
   }
 }
 // 添加请求拦截器
-request.interceptors.request.use(
+AXIOS_INSTANCE.interceptors.request.use(
   (config) => {
     // 在发送请求之前做些什么
     handleRequest(config)
@@ -78,7 +78,7 @@ request.interceptors.request.use(
 )
 
 // 添加响应拦截器
-request.interceptors.response.use(
+AXIOS_INSTANCE.interceptors.response.use(
   (response) => {
     // 对响应数据做点什么
     return handleResponse(response)
@@ -91,19 +91,7 @@ request.interceptors.response.use(
   }
 )
 
-type EnhancedGet = <T = any>(
-  url: string,
-  params?: T,
-  config?: AxiosRequestConfig
-) => Promise<any>
-
-const enhancedGet: EnhancedGet = (url, params, config) => {
-  return request.get(url, { params, ...config })
+export const request = <T>(config: AxiosRequestConfig): Promise<T> => {
+  return AXIOS_INSTANCE(config)
 }
-
-export default {
-  get: enhancedGet,
-  post: request.post,
-  put: request.put,
-  delete: request.delete
-}
+export default request

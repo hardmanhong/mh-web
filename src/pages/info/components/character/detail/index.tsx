@@ -12,8 +12,12 @@ import {
   Typography
 } from 'antd'
 import { uniqueId } from 'lodash-es'
-import { getAccountList } from '@/api/account'
-import { createCharacter, getCharacter, updateCharacter } from '@/api/character'
+import {
+  accountFindAll,
+  characterCreate,
+  characterFindOne,
+  characterUpdate
+} from '@/api'
 import { SelectFilter, ZForm } from '@/components'
 import { useRequest } from '@/hooks'
 import { useMessage } from '@/provider'
@@ -33,13 +37,11 @@ const CharacterDetail: React.FC<IProps> = () => {
   const params = useParams()
   const isEdit = Number(params.id) > 0
 
-  const { loading, data, run } = useRequest(getCharacter, {
+  const { loading, data, run } = useRequest(characterFindOne, {
     manual: true,
-    params: {
-      id: params.id as string
-    }
+    params: Number(params.id)
   })
-  const { data: accountList } = useRequest(getAccountList, {
+  const { data: accountList } = useRequest(accountFindAll, {
     defaultData: []
   })
   const { setNeedReload } = useTabsStore()
@@ -47,7 +49,7 @@ const CharacterDetail: React.FC<IProps> = () => {
 
   useEffect(() => {
     if (isEdit && params.id) {
-      run({ id: params.id }).then((res) => {
+      run(Number(params.id)).then((res) => {
         if (Array.isArray(res.pets)) {
           setPets(res.pets.map(() => ({ uid: uniqueId() })))
         }
@@ -59,13 +61,13 @@ const CharacterDetail: React.FC<IProps> = () => {
     form.validateFields().then(() => {
       const values = form.getFieldsValue(true)
       if (isEdit) {
-        updateCharacter(params.id as string, values).then(() => {
+        characterUpdate(Number(params.id), values).then(() => {
           message.success('编辑成功')
           navigate('/info')
           setNeedReload(true)
         })
       } else {
-        createCharacter(values).then(() => {
+        characterCreate(values).then(() => {
           message.success('创建成功')
           navigate('/info')
           setNeedReload(true)

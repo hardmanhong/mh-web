@@ -1,0 +1,211 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/post": {
+      "get": {
+        "operationId": "PostController_findAll",
+        "summary": "查询文章列表",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "页码",
+            "schema": { "default": 1, "type": "number" }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "每页数量",
+            "schema": { "default": 10, "type": "number" }
+          },
+          {
+            "name": "title",
+            "required": false,
+            "in": "query",
+            "description": "标题",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/PaginationModel" },
+                    {
+                      "properties": {
+                        "list": {
+                          "type": "array",
+                          "items": { "$ref": "#/components/schemas/PostDto" }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": ["post"]
+      },
+      "post": {
+        "operationId": "PostController_create",
+        "summary": "创建文章",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreatePostDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "type": "number" } }
+            }
+          }
+        },
+        "tags": ["post"]
+      }
+    },
+    "/post/{id}": {
+      "get": {
+        "operationId": "PostController_findOne",
+        "summary": "查询文章",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "#/components/schemas/PostDto" }
+              }
+            }
+          }
+        },
+        "tags": ["post"]
+      },
+      "put": {
+        "operationId": "PostController_update",
+        "summary": "更新文章",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdatePostDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "#/components/schemas/PostDto" }
+              }
+            }
+          }
+        },
+        "tags": ["post"]
+      },
+      "delete": {
+        "operationId": "PostController_remove",
+        "summary": "删除文章",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true
+                }
+              }
+            }
+          }
+        },
+        "tags": ["post"]
+      }
+    }
+  },
+  "info": {
+    "title": "聚宝盆 API",
+    "description": "",
+    "version": "v1",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [{ "url": "http://localhost:9000/v1" }],
+  "components": {
+    "schemas": {
+      "PostDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number", "description": "ID" },
+          "title": { "type": "string", "description": "标题" },
+          "content": { "type": "string", "description": "内容" },
+          "createdAt": {
+            "type": "string",
+            "description": "创建时间",
+            "example": "2023-07-20T06:55:17.086Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "更新时间",
+            "example": "2023-07-20T06:55:17.086Z"
+          }
+        },
+        "required": ["id", "title", "content", "createdAt", "updatedAt"]
+      },
+      "CreatePostDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "description": "标题" },
+          "content": { "type": "string", "description": "内容" }
+        },
+        "required": ["title", "content"]
+      },
+      "UpdatePostDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "description": "标题" },
+          "content": { "type": "string", "description": "内容" }
+        },
+        "required": ["title", "content"]
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "api-json",
+    "url": "http://localhost:9000/api-json"
+  }
+}

@@ -6,55 +6,54 @@ import {
   SorterResult,
   TablePaginationConfig
 } from 'antd/lib/table/interface'
-import { createGoods, getGoodsList } from '@/api/goods'
 import {
-  TTradeBuy,
-  TTradeSell,
-  createTradeBuy,
-  createTradeSell,
-  deleteTradeBuy,
-  getTradeBuyList,
-  updateTradeBuy,
-  updateTradeSell
-} from '@/api/trade'
+  BuyDto,
+  SellDto,
+  buyCreate,
+  buyFindAll,
+  buyRemove,
+  buyUpdate,
+  goodsCreate,
+  goodsFindAll,
+  sellCreate,
+  sellUpdate
+} from '@/api'
 import { PageList, ZForm, ZPagination, ZTable } from '@/components'
 import { useModalPrpos, usePaginated, useRequest } from '@/hooks'
 import { useMessage } from '@/provider'
 import { formatDate } from '@/utils'
+import { GoodsDto } from '../../api/index'
 import ModalEdit from './ModalEdit'
 import ModalSell from './ModalSell'
 import { formPropsFn, tableStaticPropsFn } from './data'
 import { IProps } from './types'
 
-type TEditBuy = {
-  _goodsType?: 1 | 2
-  goodsId?: number
-  name?: string
-  minPrice?: number
-  maxPrice?: number
-  id?: number
-  price?: number
-  quantity?: number
-}
 const Trade: React.FC<IProps> = () => {
   const message = useMessage()
   const [form] = Form.useForm()
   const { loading, data, tableProps, paginationProps, onSearch } =
-    usePaginated(getTradeBuyList)
+    usePaginated(buyFindAll)
   const {
     data: { list: goodsList = [] },
     run: fetchGoodsList
-  } = useRequest(getGoodsList, {
+  } = useRequest(goodsFindAll, {
     params: {
       page: 1,
       pageSize: 1000
     },
-    defaultData: { list: [], count: 0 }
+    defaultData: { list: [], total: 0, page: 1, pageSize: 10 }
   })
-  const [modalEditProps, openModalEdit, closeModalEdit] =
-    useModalPrpos<TTradeBuy>({})
-  const [modalSellProps, openModalSell, closeModalSell] =
-    useModalPrpos<TTradeSell>({})
+  const [modalEditProps, openModalEdit, closeModalEdit] = useModalPrpos<
+    Partial<BuyDto>
+  >({})
+  const [modalSellProps, openModalSell, closeModalSell] = useModalPrpos<
+    Partial<SellDto> & {
+      goods?: any[]
+      buyPrice?: number
+      inventory?: number
+      buyId?: number
+    }
+  >({})
   const onAdd = () => {
     openModalEdit({})
   }
@@ -74,34 +73,36 @@ const Trade: React.FC<IProps> = () => {
   }
   const onDelete = (record: any) => {
     if (!record.id) return
-    deleteTradeBuy(record.id).then(() => {
+    buyRemove(record.id).then(() => {
       message.success('删除成功')
       onSearch()
     })
   }
-  const onEditOk = async (values: TEditBuy) => {
+  const onEditOk = async (
+    values: BuyDto & GoodsDto & { _goodsType?: number }
+  ) => {
     try {
       const isCreateGoods = values?._goodsType === 2
       if (isCreateGoods) {
-        const goodsId = await createGoods({
+        const goodsId = await goodsCreate({
           name: values.name as string,
           minPrice: values.minPrice as number,
           maxPrice: values.maxPrice as number
-        }).then((goods) => {
-          return goods.id
+        }).then((goodsId) => {
+          return goodsId
         })
         values.goodsId = goodsId
         fetchGoodsList()
       }
       const id = modalEditProps.data?.id
       if (id) {
-        updateTradeBuy(id, values).then(() => {
+        buyUpdate(id, values).then(() => {
           closeModalEdit()
           message.success('操作成功')
           onSearch()
         })
       } else {
-        createTradeBuy(values).then(() => {
+        buyCreate(values).then(() => {
           closeModalEdit()
           message.success('操作成功')
           onSearch()
@@ -111,21 +112,22 @@ const Trade: React.FC<IProps> = () => {
       console.log('error', error)
     }
   }
-  const onSellOk = (values: TTradeSell) => {
+  const onSellOk = (values: SellDto) => {
     const id = modalSellProps.data?.id
     if (id) {
-      updateTradeSell(id, {
+      sellUpdate(id, {
         ...values,
-        buyId: modalSellProps.data?.buyId
+        buyId: modalSellProps.data.buyId as number
       }).then(() => {
         closeModalSell()
         message.success('操作成功')
         onSearch()
       })
     } else {
-      createTradeSell({
+      sellCreate({
         ...values,
-        ...modalSellProps.data
+        ...modalSellProps.data,
+        buyId: modalSellProps.data.buyId as number
       }).then(() => {
         closeModalSell()
         message.success('操作成功')

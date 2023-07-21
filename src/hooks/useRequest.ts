@@ -51,10 +51,15 @@ function useRequest<Params, Data, T extends Options<Params, Data>>(
 
   const run = useCallback(
     (queryParams?: Params) => {
+      let p = params
       setLoading(true)
       setParams((prevParams) => ({ ...prevParams, ...queryParams }))
-
-      return api({ ...initialParams, ...params, ...queryParams } as Params)
+      if (['number', 'string'].includes(typeof initialParams)) {
+        p = params || initialParams
+      } else {
+        p = { ...initialParams, ...params, ...queryParams }
+      }
+      return api(p as Params)
         .then((res) => {
           if (typeof onSuccess === 'function') {
             onSuccess(res)

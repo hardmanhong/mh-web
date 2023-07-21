@@ -14,18 +14,18 @@ import {
   message
 } from 'antd'
 import dayjs from 'dayjs'
-import { Post, deletePost, getPostList } from '@/api/post'
+import { PostDto, postFindAll, postRemove } from '@/api'
 import { useBoolean, usePaginated } from '@/hooks'
 import './style.less'
 
 const PostList: React.FC<{}> = () => {
   const navigate = useNavigate()
-  const [list, setList] = useState<Required<Post>[]>([])
+  const [list, setList] = useState<Required<PostDto>[]>([])
   const [hasMore, setHasMore] = useBoolean(true)
-  const { loading, params, error, run } = usePaginated(getPostList, {
+  const { loading, params, error, run } = usePaginated(postFindAll, {
     manual: true,
     defaultPageSize: 15,
-    defaultData: { count: 0, list: [] }
+    defaultData: { page: 1, pageSize: 10, total: 0, list: [] }
   })
 
   const loadMoreData = () => {
@@ -36,7 +36,7 @@ const PostList: React.FC<{}> = () => {
     params.page++
     run().then((res) => {
       setList((list) => [...list, ...res.list])
-      if (list.length >= res.count) {
+      if (list.length >= res.total) {
         setHasMore(false)
       }
     })
@@ -49,7 +49,7 @@ const PostList: React.FC<{}> = () => {
     navigate(`/post/add`)
   }
   const onConfirm = (id: number) => {
-    deletePost(id).then(() => {
+    postRemove(id).then(() => {
       message.success('删除成功')
       params.page = 1
       run()
@@ -59,7 +59,7 @@ const PostList: React.FC<{}> = () => {
     params.page = 1
     run({ ...params, title: value }).then((res) => {
       setList(res.list)
-      if (list.length >= res.count) {
+      if (list.length >= res.total) {
         setHasMore(false)
       }
     })

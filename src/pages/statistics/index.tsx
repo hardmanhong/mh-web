@@ -10,7 +10,11 @@ import {
   Spin,
   Statistic
 } from 'antd'
-import { getBusiness, getInventory, getStatistics } from '@/api/statistics'
+import {
+  statisticsGetBusiness,
+  statisticsGetInventory,
+  statisticsGetStatistics
+} from '@/api'
 import { useRequest } from '@/hooks'
 import { useThemeStore } from '@/store'
 import './style.less'
@@ -23,7 +27,7 @@ const Home: React.FC<any> = () => {
   const pieRef = useRef<Pie | null>(null)
   const pieElementRef = useRef<HTMLDivElement | null>(null)
   const [type, setType] = useState('day')
-  const { data: total } = useRequest(getStatistics, {
+  const { data: total } = useRequest(statisticsGetStatistics, {
     defaultData: { totalProfit: '0', totalInventory: '0' }
   })
 
@@ -31,7 +35,7 @@ const Home: React.FC<any> = () => {
     loading,
     data: { buyList, sellList, profitList },
     run: fetchProfit
-  } = useRequest(getBusiness, {
+  } = useRequest(statisticsGetBusiness, {
     params: { type },
     defaultData: {
       buyList: [],
@@ -41,7 +45,7 @@ const Home: React.FC<any> = () => {
   })
 
   const { loading: inventoryLoading, data: inventory } = useRequest(
-    getInventory,
+    statisticsGetInventory,
     {
       defaultData: []
     }

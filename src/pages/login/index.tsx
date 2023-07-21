@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Alert, Button, Form, Input, Tabs } from 'antd'
-import { login, signup } from '@/api/user'
+import { userLogin, userRegister } from '@/api'
 import { useMessage } from '@/provider'
 import './style.less'
 
@@ -13,7 +13,7 @@ const Login: React.FC<{
   const message = useMessage()
   const navagate = useNavigate()
   const onLogin = (values: any) => {
-    login(values)
+    userLogin(values)
       .then((res: any) => {
         message.success('登录成功')
         onOk()
@@ -70,7 +70,7 @@ const SignUp: React.FC<{
 }> = ({ onOk, onError }) => {
   const message = useMessage()
   const onFinish = (values: any) => {
-    signup(values)
+    userRegister(values)
       .then(() => {
         message.success('注册成功')
         onOk()

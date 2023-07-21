@@ -11,7 +11,7 @@ import {
   Spin,
   Typography
 } from 'antd'
-import { TCharacter, deleteCharacter, getCharacterList } from '@/api/character'
+import { CharacterDto, characterFindAll, characterRemove } from '@/api'
 import { useRequest } from '@/hooks'
 import { useMessage } from '@/provider'
 import { Equipment, Info, Pet } from './data'
@@ -91,7 +91,7 @@ const CardItem = ({
 const Character: React.FC<IProps> = () => {
   const navigate = useNavigate()
   const message = useMessage()
-  const { loading, data, run } = useRequest(getCharacterList, {
+  const { loading, data, run } = useRequest(characterFindAll, {
     defaultData: []
   })
 
@@ -102,7 +102,7 @@ const Character: React.FC<IProps> = () => {
     navigate(`/info/character/${record.id}`)
   }
   const onDelete = (record: any) => {
-    deleteCharacter(record.id).then(() => {
+    characterRemove(record.id).then(() => {
       message.success('删除成功')
       run()
     })
@@ -120,7 +120,7 @@ const Character: React.FC<IProps> = () => {
       >
         {data.length > 0 ? (
           <Row gutter={[16, 16]}>
-            {((data || []) as TCharacter[]).map((item) => (
+            {((data || []) as CharacterDto[]).map((item) => (
               <Col key={item.id} span={12}>
                 <CardItem
                   data={item}

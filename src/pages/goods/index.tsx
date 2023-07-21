@@ -1,12 +1,12 @@
 import React from 'react'
 import { Button, Form, Space } from 'antd'
-import type { TGoods } from '@/api/goods'
 import {
-  createGoods,
-  deleteGoods,
-  getGoodsList,
-  updateGoods
-} from '@/api/goods'
+  CreateGoodsDto,
+  goodsCreate,
+  goodsFindAll,
+  goodsRemove,
+  goodsUpdate
+} from '@/api'
 import { PageList, ZForm, ZPagination, ZTable } from '@/components'
 import { useModalPrpos, usePaginated } from '@/hooks'
 import { useMessage } from '@/provider'
@@ -18,15 +18,14 @@ const Goods: React.FC<IProps> = () => {
   const message = useMessage()
   const [form] = Form.useForm()
   const { loading, tableProps, paginationProps, onSearch } =
-    usePaginated(getGoodsList)
-  const [modalEditProps, openModalEdit, closeModalEdit] = useModalPrpos<TGoods>(
-    {
-      name: '',
-      minPrice: 0,
-      maxPrice: 0
-    }
-  )
-
+    usePaginated(goodsFindAll)
+  const [modalEditProps, openModalEdit, closeModalEdit] = useModalPrpos<
+    CreateGoodsDto & { id?: number }
+  >({
+    name: '',
+    minPrice: 0,
+    maxPrice: 0
+  })
   const onAdd = () => {
     openModalEdit({
       name: '',
@@ -41,21 +40,21 @@ const Goods: React.FC<IProps> = () => {
   }
   const onDelete = (record: any) => {
     if (!record.id) return
-    deleteGoods(record.id).then(() => {
+    goodsRemove(record.id).then(() => {
       message.success('删除成功')
       onSearch()
     })
   }
-  const onOk = (values: TGoods) => {
+  const onOk = (values: CreateGoodsDto) => {
     const id = modalEditProps.data?.id
     if (id) {
-      updateGoods(id, values).then(() => {
+      goodsUpdate(id, values).then(() => {
         closeModalEdit()
         message.success('操作成功')
         onSearch()
       })
     } else {
-      createGoods(values).then(() => {
+      goodsCreate(values).then(() => {
         closeModalEdit()
         message.success('操作成功')
         onSearch()

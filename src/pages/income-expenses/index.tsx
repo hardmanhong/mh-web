@@ -1,13 +1,13 @@
 import React from 'react'
 import { Button, Form, Space, Tag } from 'antd'
-import dayjs from 'dayjs'
-import type { TIncomeExpenses } from '@/api/income-expenses'
+import dayjs, { Dayjs } from 'dayjs'
 import {
-  createIncomeExpenses,
-  deleteIncomeExpenses,
-  getIncomeExpensesList,
-  updateIncomeExpenses
-} from '@/api/income-expenses'
+  IncomeExpensesDto,
+  incomeExpensesCreate,
+  incomeExpensesFindAll,
+  incomeExpensesRemove,
+  incomeExpensesUpdate
+} from '@/api'
 import { PageList, ZForm, ZPagination, ZTable } from '@/components'
 import { useModalPrpos, usePaginated } from '@/hooks'
 import { useMessage } from '@/provider'
@@ -19,15 +19,19 @@ const IncomeExpenses: React.FC<IProps> = () => {
   const message = useMessage()
   const [form] = Form.useForm()
   const { loading, data, tableProps, paginationProps, onSearch } = usePaginated(
-    getIncomeExpensesList
+    incomeExpensesFindAll
   )
-  const [modalEditProps, openModalEdit, closeModalEdit] =
-    useModalPrpos<TIncomeExpenses>({
-      type: 1,
-      category: 1,
-      amount: 0,
-      date: dayjs()
-    })
+  const [modalEditProps, openModalEdit, closeModalEdit] = useModalPrpos<
+    Omit<IncomeExpensesDto, 'id' | 'date' | 'remark'> & {
+      id?: number
+      date: Dayjs
+    }
+  >({
+    type: 1,
+    category: 1,
+    amount: 0,
+    date: dayjs()
+  })
 
   const onAdd = () => {
     openModalEdit()
@@ -40,21 +44,21 @@ const IncomeExpenses: React.FC<IProps> = () => {
   }
   const onDelete = (record: any) => {
     if (!record.id) return
-    deleteIncomeExpenses(record.id).then(() => {
+    incomeExpensesRemove(record.id).then(() => {
       message.success('删除成功')
       onSearch()
     })
   }
-  const onOk = (values: TIncomeExpenses) => {
+  const onOk = (values: IncomeExpensesDto) => {
     const id = modalEditProps.data?.id
     if (id) {
-      updateIncomeExpenses(id, values).then(() => {
+      incomeExpensesUpdate(id, values).then(() => {
         closeModalEdit()
         message.success('操作成功')
         onSearch()
       })
     } else {
-      createIncomeExpenses(values).then(() => {
+      incomeExpensesCreate(values).then(() => {
         closeModalEdit()
         message.success('操作成功')
         onSearch()

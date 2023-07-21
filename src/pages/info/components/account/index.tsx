@@ -1,11 +1,6 @@
 import React from 'react'
 import { Button } from 'antd'
-import {
-  TAccount,
-  createAccount,
-  getAccountList,
-  updateAccount
-} from '@/api/account'
+import { AccountDto, accountCreate, accountFindAll, accountUpdate } from '@/api'
 import { PageList, ZTable } from '@/components'
 import { useModalPrpos, useRequest } from '@/hooks'
 import { useMessage } from '@/provider'
@@ -15,14 +10,15 @@ import { IProps } from './types'
 
 const Account: React.FC<IProps> = () => {
   const message = useMessage()
-  const { loading, data, run } = useRequest(getAccountList, {
+  const { loading, data, run } = useRequest(accountFindAll, {
     defaultData: []
   })
-  const [modalEditProps, openModalEdit, closeModalEdit] =
-    useModalPrpos<TAccount>({
-      userName: '',
-      server: ''
-    })
+  const [modalEditProps, openModalEdit, closeModalEdit] = useModalPrpos<
+    Partial<AccountDto> & { userName: string }
+  >({
+    userName: '',
+    server: ''
+  })
 
   const onAdd = () => {
     openModalEdit({
@@ -38,13 +34,13 @@ const Account: React.FC<IProps> = () => {
   const onEditOk = (values: any) => {
     const id = modalEditProps.data?.id
     if (id) {
-      updateAccount(id, values).then(() => {
+      accountUpdate(id, values).then(() => {
         closeModalEdit()
         message.success('操作成功')
         run()
       })
     } else {
-      createAccount(values).then(() => {
+      accountCreate(values).then(() => {
         closeModalEdit()
         message.success('操作成功')
         run()

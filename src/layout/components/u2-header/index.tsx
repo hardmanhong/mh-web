@@ -10,7 +10,7 @@ import {
   Space,
   message
 } from 'antd'
-import { changePassword } from '@/api/user'
+import { userChangePassword } from '@/api'
 import { ZForm } from '@/components'
 import { useBoolean } from '@/hooks'
 import LayoutSwitch from './LayoutSwitch'
@@ -31,7 +31,7 @@ const U2Header: React.FC = () => {
   }
   const onChangePsw = () => {
     form.validateFields().then((values) => {
-      changePassword(values).then(() => {
+      userChangePassword(values).then(() => {
         setOpen(false)
         message.success('修改成功')
       })

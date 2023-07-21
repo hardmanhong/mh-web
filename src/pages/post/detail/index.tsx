@@ -14,7 +14,7 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { toJsxRuntime } from 'hast-util-to-jsx-runtime'
 // @ts-ignore
-import { createPost, getPost, updatePost } from '@/api/post'
+import { postCreate, postFindOne, postUpdate } from '@/api'
 import { Markdown } from '@/components'
 import { useBoolean, useRequest } from '@/hooks'
 import EnhancedTextArea from './EnhancedTextArea'
@@ -44,8 +44,9 @@ const Post: React.FC<IProps> = () => {
   const postRef = useRef<HTMLDivElement>(null)
   const starryNightRef = useRef<Awaited<ReturnType<typeof createStarryNight>>>()
   const [anchorTree, setAnchorTree] = useState<AnchorItem[]>([])
-  const { data, run } = useRequest(getPost, {
-    params: { id: params.id || '' }
+  const { data, run } = useRequest(postFindOne, {
+    manual: true,
+    params: Number(params.id || 0)
   })
   const renderHighLight = (text: string) => {
     if (starryNightRef.current) {
@@ -87,7 +88,7 @@ const Post: React.FC<IProps> = () => {
     }
   }, [editing, text])
   const onAdd = () => {
-    createPost({
+    postCreate({
       title,
       content: text
     }).then((id) => {
@@ -97,7 +98,7 @@ const Post: React.FC<IProps> = () => {
   }
   const onUpdate = () => {
     if (params.id) {
-      updatePost(params.id, {
+      postUpdate(Number(params.id), {
         title,
         content: text
       }).then(() => {

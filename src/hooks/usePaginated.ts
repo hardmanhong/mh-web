@@ -14,7 +14,7 @@ type PaginationOptions<Params, Data> = Options<Params, Data> & {
 
 type PaginationData<Data> = Data & {
   list: any[]
-  count: number
+  total: number
 }
 
 type PaginationParams<Params> = Params & {
@@ -78,7 +78,7 @@ function usePaginated<Params, Data>(
       showSizeChanger: true,
       showQuickJumper: true,
       pageSize: params.pageSize,
-      total: data?.count,
+      total: data?.total,
       onChange,
       onShowSizeChange
     },
