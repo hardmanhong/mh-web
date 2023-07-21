@@ -9,7 +9,10 @@
     "build": "cross-env NODE_ENV=production webpack serve --config ./webpack/webpack.prod.js",
     "analyze": "cross-env NODE_ENV=production webpack serve --config ./webpack/webpack.prod.js --analyze",
     "format": "prettier --write ./src/**/*.{js,jsx,ts,tsx,less,scss}",
-    "api": "ts-node ci/index.ts"
+    "api": "ts-node ci/index.ts",
+    "prepare": "husky install",
+    "lint-staged": "lint-staged",
+    "commitlint": "commitlint --edit"
   },
   "repository": {
     "type": "git",
@@ -28,6 +31,8 @@
   "homepage": "https://github.com/hardmanhong/u2admin#readme",
   "devDependencies": {
     "@babel/core": "^7.19.3",
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
     "@trivago/prettier-plugin-sort-imports": "^3.3.1",
     "@types/lodash-es": "^4.17.7",
     "@types/node": "^20.4.2",
@@ -42,8 +47,10 @@
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^4.2.2",
     "html-webpack-plugin": "^5.5.0",
+    "husky": "^8.0.3",
     "less": "^4.1.3",
     "less-loader": "^11.1.0",
+    "lint-staged": "^13.2.3",
     "mini-css-extract-plugin": "^2.7.2",
     "minimist": "^1.2.7",
     "openapi-typescript": "^6.3.4",
