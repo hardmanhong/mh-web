@@ -222,11 +222,12 @@ class ApiDoc {
       const refName = bodyParams.content['application/json'].schema?.$ref
         ?.split('/')
         .pop()
+      const name = capitalizeFirstLetter(refName || '', 'lower')
       parameters.push({
-        name: refName,
+        name,
         type: refName
       })
-      result.bodyName = bodyParams ? (refName as string) : ''
+      result.bodyName = bodyParams ? (name as string) : ''
     }
     result.paramsName = params?.length ? 'params' : ''
 

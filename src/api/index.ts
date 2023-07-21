@@ -417,23 +417,23 @@ export interface UpdatePostDto {
 }
 
 /** 登录 */
-export function userLogin(UserDto: UserDto): Promise<string> {
-  return request({ url: `/user/login`, method: 'post', data: UserDto })
+export function userLogin(userDto: UserDto): Promise<string> {
+  return request({ url: `/user/login`, method: 'post', data: userDto })
 }
 
 /** 注册 */
-export function userRegister(UserDto: UserDto): Promise<null> {
-  return request({ url: `/user/register`, method: 'post', data: UserDto })
+export function userRegister(userDto: UserDto): Promise<null> {
+  return request({ url: `/user/register`, method: 'post', data: userDto })
 }
 
 /** 修改密码 */
 export function userChangePassword(
-  ChangePasswordUserDto: ChangePasswordUserDto
+  changePasswordUserDto: ChangePasswordUserDto
 ): Promise<null> {
   return request({
     url: `/user/changePassword`,
     method: 'post',
-    data: ChangePasswordUserDto
+    data: changePasswordUserDto
   })
 }
 
@@ -447,8 +447,8 @@ export function goodsFindAll(params: {
 }
 
 /** 创建商品 */
-export function goodsCreate(CreateGoodsDto: CreateGoodsDto): Promise<number> {
-  return request({ url: `/goods`, method: 'post', data: CreateGoodsDto })
+export function goodsCreate(createGoodsDto: CreateGoodsDto): Promise<number> {
+  return request({ url: `/goods`, method: 'post', data: createGoodsDto })
 }
 
 /** 查询商品 */
@@ -459,9 +459,9 @@ export function goodsFindOne(id: number): Promise<GoodsDto> {
 /** 更新商品 */
 export function goodsUpdate(
   id: number,
-  UpdateGoodsDto: UpdateGoodsDto
+  updateGoodsDto: UpdateGoodsDto
 ): Promise<number> {
-  return request({ url: `/goods/${id}`, method: 'put', data: UpdateGoodsDto })
+  return request({ url: `/goods/${id}`, method: 'put', data: updateGoodsDto })
 }
 
 /** 删除商品 */
@@ -489,8 +489,8 @@ export function buyFindAll(params: {
 }
 
 /** 创建买入记录 */
-export function buyCreate(CreateBuyDto: CreateBuyDto): Promise<number> {
-  return request({ url: `/buy`, method: 'post', data: CreateBuyDto })
+export function buyCreate(createBuyDto: CreateBuyDto): Promise<number> {
+  return request({ url: `/buy`, method: 'post', data: createBuyDto })
 }
 
 /** 查询买入记录 */
@@ -501,9 +501,9 @@ export function buyFindOne(id: number): Promise<BuyDto> {
 /** 更新买入记录 */
 export function buyUpdate(
   id: number,
-  UpdateBuyDto: UpdateBuyDto
+  updateBuyDto: UpdateBuyDto
 ): Promise<number> {
-  return request({ url: `/buy/${id}`, method: 'put', data: UpdateBuyDto })
+  return request({ url: `/buy/${id}`, method: 'put', data: updateBuyDto })
 }
 
 /** 删除买入记录 */
@@ -512,16 +512,16 @@ export function buyRemove(id: number): Promise<null> {
 }
 
 /** 创建卖出记录 */
-export function sellCreate(CreateSellDto: CreateSellDto): Promise<number> {
-  return request({ url: `/sell`, method: 'post', data: CreateSellDto })
+export function sellCreate(createSellDto: CreateSellDto): Promise<number> {
+  return request({ url: `/sell`, method: 'post', data: createSellDto })
 }
 
 /** 更新卖出记录 */
 export function sellUpdate(
   id: number,
-  UpdateSellDto: UpdateSellDto
+  updateSellDto: UpdateSellDto
 ): Promise<number> {
-  return request({ url: `/sell/${id}`, method: 'put', data: UpdateSellDto })
+  return request({ url: `/sell/${id}`, method: 'put', data: updateSellDto })
 }
 
 /** 删除卖出记录 */
@@ -553,9 +553,9 @@ export function accountFindAll(): Promise<AccountDto[]> {
 
 /** 创建账号 */
 export function accountCreate(
-  CreateAccountDto: CreateAccountDto
+  createAccountDto: CreateAccountDto
 ): Promise<number> {
-  return request({ url: `/account`, method: 'post', data: CreateAccountDto })
+  return request({ url: `/account`, method: 'post', data: createAccountDto })
 }
 
 /** 查询账号 */
@@ -566,12 +566,12 @@ export function accountFindOne(id: number): Promise<AccountDto> {
 /** 更新账号 */
 export function accountUpdate(
   id: number,
-  UpdateAccountDto: UpdateAccountDto
+  updateAccountDto: UpdateAccountDto
 ): Promise<number> {
   return request({
     url: `/account/${id}`,
     method: 'put',
-    data: UpdateAccountDto
+    data: updateAccountDto
   })
 }
 
@@ -587,12 +587,12 @@ export function characterFindAll(): Promise<CharacterDto[]> {
 
 /** 创建角色 */
 export function characterCreate(
-  CreateCharacterDto: CreateCharacterDto
+  createCharacterDto: CreateCharacterDto
 ): Promise<number> {
   return request({
     url: `/character`,
     method: 'post',
-    data: CreateCharacterDto
+    data: createCharacterDto
   })
 }
 
@@ -604,12 +604,12 @@ export function characterFindOne(id: number): Promise<CharacterDto> {
 /** 更新角色 */
 export function characterUpdate(
   id: number,
-  UpdateCharacterDto: UpdateCharacterDto
+  updateCharacterDto: UpdateCharacterDto
 ): Promise<number> {
   return request({
     url: `/character/${id}`,
     method: 'put',
-    data: UpdateCharacterDto
+    data: updateCharacterDto
   })
 }
 
@@ -637,12 +637,12 @@ export function incomeExpensesFindAll(params: {
 
 /** 创建收支 */
 export function incomeExpensesCreate(
-  CreateIncomeExpensesDto: CreateIncomeExpensesDto
+  createIncomeExpensesDto: CreateIncomeExpensesDto
 ): Promise<IncomeExpensesDto> {
   return request({
     url: `/income-expenses`,
     method: 'post',
-    data: CreateIncomeExpensesDto
+    data: createIncomeExpensesDto
   })
 }
 
@@ -656,12 +656,12 @@ export function incomeExpensesFindOne(
 /** 更新收支 */
 export function incomeExpensesUpdate(
   id: number,
-  UpdateIncomeExpensesDto: UpdateIncomeExpensesDto
+  updateIncomeExpensesDto: UpdateIncomeExpensesDto
 ): Promise<IncomeExpensesDto> {
   return request({
     url: `/income-expenses/${id}`,
     method: 'put',
-    data: UpdateIncomeExpensesDto
+    data: updateIncomeExpensesDto
   })
 }
 
@@ -680,8 +680,8 @@ export function postFindAll(params: {
 }
 
 /** 创建文章 */
-export function postCreate(CreatePostDto: CreatePostDto): Promise<number> {
-  return request({ url: `/post`, method: 'post', data: CreatePostDto })
+export function postCreate(createPostDto: CreatePostDto): Promise<number> {
+  return request({ url: `/post`, method: 'post', data: createPostDto })
 }
 
 /** 查询文章 */
@@ -692,9 +692,9 @@ export function postFindOne(id: number): Promise<PostDto> {
 /** 更新文章 */
 export function postUpdate(
   id: number,
-  UpdatePostDto: UpdatePostDto
+  updatePostDto: UpdatePostDto
 ): Promise<PostDto> {
-  return request({ url: `/post/${id}`, method: 'put', data: UpdatePostDto })
+  return request({ url: `/post/${id}`, method: 'put', data: updatePostDto })
 }
 
 /** 删除文章 */
