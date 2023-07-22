@@ -65,7 +65,7 @@ const Post: React.FC<IProps> = () => {
 
   useEffect(() => {
     if (params.id) {
-      run().then((res) => {
+      run(Number(params.id)).then((res) => {
         setTitle(res.title)
         setText(res.content)
       })

@@ -53,11 +53,14 @@ function useRequest<Params, Data, T extends Options<Params, Data>>(
     (queryParams?: Params) => {
       let p = params
       setLoading(true)
-      setParams((prevParams) => ({ ...prevParams, ...queryParams }))
-      if (['number', 'string'].includes(typeof initialParams)) {
-        p = params || initialParams
+      if (
+        ['number', 'string'].includes(typeof (initialParams || queryParams))
+      ) {
+        p = queryParams || initialParams
+        setParams(queryParams as any)
       } else {
         p = { ...initialParams, ...params, ...queryParams }
+        setParams((prevParams) => ({ ...prevParams, ...queryParams }))
       }
       return api(p as Params)
         .then((res) => {
