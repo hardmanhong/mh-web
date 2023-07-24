@@ -126,7 +126,10 @@ const PostList: React.FC<{}> = () => {
               >
                 <List.Item.Meta
                   title={
-                    <Link to={`/post/${item.id}`} key={item.id}>
+                    <Link
+                      to={`/post/${item.id}?_nav=${item.title}`}
+                      key={item.id}
+                    >
                       {item.title}
                     </Link>
                   }

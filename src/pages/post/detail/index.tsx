@@ -78,8 +78,9 @@ const Post: React.FC<IProps> = () => {
     })
   }, [])
   useEffect(() => {
+    if (!editing) return
     renderHighLight(text)
-  }, [text])
+  }, [text, editing])
 
   useEffect(() => {
     if (editing) return

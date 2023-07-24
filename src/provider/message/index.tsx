@@ -5,7 +5,7 @@ import { EVENT, eventEmitter } from '@/utils'
 
 const Context = React.createContext<MessageInstance>(message)
 
-const MessgaeProvider: React.FC<{ children: React.ReactNode }> = ({
+const MessageProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
   const [messageApi, contextHolder] = message.useMessage()
@@ -30,4 +30,4 @@ const useMessage = () => {
   return useContext(Context)
 }
 
-export { MessgaeProvider, useMessage }
+export { MessageProvider, useMessage }

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
-import { MessgaeProvider } from './provider'
+import { MessageProvider } from './provider'
 import router from './router'
 import { useThemeStore } from './store'
 import { DARK_THEME, LIGHT_THEME } from './store/theme'
@@ -25,9 +25,9 @@ function App() {
         token: themeToken
       }}
     >
-      <MessgaeProvider>
+      <MessageProvider>
         <RouterProvider router={router}></RouterProvider>
-      </MessgaeProvider>
+      </MessageProvider>
     </ConfigProvider>
   )
 }
