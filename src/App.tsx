@@ -1,14 +1,15 @@
 import { useEffect } from 'react'
-import { RouterProvider } from 'react-router-dom'
+import { useRoutes } from 'react-router-dom'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import { MessageProvider } from './provider'
-import router from './router'
+import { routerConfig } from './router'
 import { useThemeStore } from './store'
 import { DARK_THEME, LIGHT_THEME } from './store/theme'
 
 function App() {
   const { theme, setTheme } = useThemeStore()
+  const element = useRoutes(routerConfig)
   useEffect(() => {
     const themeMedia = window.matchMedia('(prefers-color-scheme: dark)')
     themeMedia.onchange = (e) => {
@@ -25,9 +26,7 @@ function App() {
         token: themeToken
       }}
     >
-      <MessageProvider>
-        <RouterProvider router={router}></RouterProvider>
-      </MessageProvider>
+      <MessageProvider>{element}</MessageProvider>
     </ConfigProvider>
   )
 }

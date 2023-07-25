@@ -139,7 +139,7 @@ const U2Tabs: React.FC<{}> = () => {
   }
   const onMenuClick = (key: string, path: string) => {
     if (key === MenuType.All) {
-      setTabs(tabs.filter((item) => item.key !== '/'))
+      setTabs(tabs.filter((item) => item.key === '/'))
       navigate('/')
     } else {
       const currentItem = tabs.find((item) => item.key === path)
