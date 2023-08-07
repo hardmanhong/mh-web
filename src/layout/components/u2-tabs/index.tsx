@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { SyncOutlined } from '@ant-design/icons'
 import { Dropdown, MenuProps, Spin, Tabs, TabsProps } from 'antd'
@@ -22,6 +22,7 @@ type TabLabelProps = {
   disabledRight?: boolean
   onRefresh: () => void
   onClick: (key: string, path: string) => void
+  onHover: (path: string) => void
 }
 
 const TabLabel = ({
@@ -32,6 +33,7 @@ const TabLabel = ({
   disabledLeft = false,
   disabledRight = false,
   onClick,
+  onHover,
   onRefresh
 }: TabLabelProps) => {
   const _onClick: MenuProps['onClick'] = ({ key }) => {
@@ -55,7 +57,11 @@ const TabLabel = ({
   ]
   return (
     <Dropdown menu={{ items, onClick: _onClick }} trigger={['contextMenu']}>
-      <span>
+      <span
+        onMouseEnter={() => {
+          onHover(path)
+        }}
+      >
         {path === activeTab && path !== '/404' && (
           <SyncOutlined onClick={onRefresh} title='刷新' spin={isReload} />
         )}
@@ -80,6 +86,7 @@ const U2Tabs: React.FC<{}> = () => {
   const { pathname, search } = useLocation()
   const [isReload, toggleIsReload] = useBoolean()
   const [searchParams] = useSearchParams()
+  const [hoverPath, setHoverPath] = useState('')
   useEffect(() => {
     if (layout === 'tabs') {
       const fullPath = pathname + search
@@ -115,6 +122,10 @@ const U2Tabs: React.FC<{}> = () => {
     setTimeout(() => {
       toggleIsReload(false)
     }, 500)
+  }
+  const onHover = (path: string) => {
+    if (!path || path === '/') return
+    setHoverPath(path)
   }
   const onEdit: TabsProps['onEdit'] = (targetKey, action) => {
     if (action === 'remove') {
@@ -186,10 +197,12 @@ const U2Tabs: React.FC<{}> = () => {
             disabledLeft={index <= 1}
             disabledRight={index === tabs.length - 1}
             onRefresh={onRefresh}
+            onHover={onHover}
             onClick={onMenuClick}
           />
         ),
-        closable: activeTab === item.key && item.closable,
+        closable:
+          (activeTab === item.key && item.closable) || hoverPath === item.key,
         children:
           isReload && item.key === activeTab && item.key !== '/404' ? (
             <Spin tip='刷新中...' className='loading' />
