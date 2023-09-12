@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useTabsStore } from '@/store'
 
 type TUseTableScroll = (loading: boolean) => [number | string, () => void]
 const useTableScroll: TUseTableScroll = (loading) => {
-  const activeTab = useTabsStore((state) => state.activeTab)
-  const [height, setHeight] = useState<string | number>(0)
+  // const { pathname, search } = useLocation()
+  // const activeTab = useTabsStore((state) => state.activeTab)
+  // const activeTab = pathname + search
+  const activeTab = undefined
+  const [height, setHeight] = useState<string | number>(500)
   const timer = useRef<ReturnType<typeof window.setTimeout>>()
   const computedHeight = useCallback(() => {
     timer.current = setTimeout(() => {
+      if (!activeTab) return
       const tableThead = document.querySelector(
         `[id='${activeTab}'] .ant-table-header`
       )
@@ -19,7 +22,7 @@ const useTableScroll: TUseTableScroll = (loading) => {
       const scrollHeight = `calc(100vh - ${bottom + paginationHeight + 16}px)`
       setHeight(scrollHeight)
     })
-  }, [])
+  }, [activeTab])
   useEffect(() => {
     computedHeight()
     return () => {

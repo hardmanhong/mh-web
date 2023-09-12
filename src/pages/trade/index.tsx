@@ -19,7 +19,7 @@ import {
   sellUpdate
 } from '@/api'
 import { PageList, ZForm, ZPagination, ZTable } from '@/components'
-import { useModalPrpos, usePaginated, useRequest } from '@/hooks'
+import { useModalProps, usePaginated, useRequest } from '@/hooks'
 import { useMessage } from '@/provider'
 import { formatDate } from '@/utils'
 import { GoodsDto } from '../../api/index'
@@ -43,10 +43,10 @@ const Trade: React.FC<IProps> = () => {
     },
     defaultData: { list: [], total: 0, page: 1, pageSize: 10 }
   })
-  const [modalEditProps, openModalEdit, closeModalEdit] = useModalPrpos<
+  const [modalEditProps, openModalEdit, closeModalEdit] = useModalProps<
     Partial<BuyDto>
   >({})
-  const [modalSellProps, openModalSell, closeModalSell] = useModalPrpos<
+  const [modalSellProps, openModalSell, closeModalSell] = useModalProps<
     Partial<SellDto> & {
       goods?: any[]
       buyPrice?: number

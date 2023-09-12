@@ -62,7 +62,9 @@ const useTabsStore = create<State & Action>((set) => ({
         const nextPath = nTabs[index - 1].key
         state.setActiveTab(nextPath)
       }
-      return { tabs: state.tabs.filter((item) => item.key !== key) }
+      const tabs = state.tabs.filter((item) => item.key !== key)
+      setTabsStore(tabs)
+      return { tabs }
     }),
   setTabs: (tabs: ITab[]) => {
     setTabsStore(tabs)

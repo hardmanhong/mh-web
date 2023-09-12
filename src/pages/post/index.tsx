@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   Button,
   Col,
@@ -19,7 +19,7 @@ import { useBoolean, usePaginated } from '@/hooks'
 import './style.less'
 
 const PostList: React.FC<{}> = () => {
-  const navigate = useNavigate()
+  // 使用 useNavigate 时在 url 变化时，会导致组件 re-render
   const [list, setList] = useState<Required<PostDto>[]>([])
   const [hasMore, setHasMore] = useBoolean(true)
   const { loading, params, error, run } = usePaginated(postFindAll, {
@@ -46,9 +46,6 @@ const PostList: React.FC<{}> = () => {
     params.page = 0
     loadMoreData()
   }, [])
-  const onAdd = () => {
-    navigate(`/post/add`)
-  }
   const onRemove = (id: number) => {
     postRemove(id).then(() => {
       message.success('删除成功')
@@ -77,9 +74,11 @@ const PostList: React.FC<{}> = () => {
             />
           </Col>
           <Col>
-            <Button type='primary' ghost onClick={onAdd}>
-              添加
-            </Button>
+            <Link to='/post/add'>
+              <Button type='primary' ghost>
+                添加
+              </Button>
+            </Link>
           </Col>
         </Row>
         <Space></Space>

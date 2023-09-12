@@ -177,6 +177,7 @@ const U2Tabs: React.FC<{}> = () => {
   }
   return (
     <Tabs
+      animated={false}
       hideAdd
       size='small'
       className='u2-tabs'

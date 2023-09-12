@@ -8,7 +8,7 @@ import {
   goodsUpdate
 } from '@/api'
 import { PageList, ZForm, ZPagination, ZTable } from '@/components'
-import { useModalPrpos, usePaginated } from '@/hooks'
+import { useModalProps, usePaginated } from '@/hooks'
 import { useMessage } from '@/provider'
 import ModalEdit from './ModalEdit'
 import { formPropsFn, tableStaticPropsFn } from './data'
@@ -19,7 +19,7 @@ const Goods: React.FC<IProps> = () => {
   const [form] = Form.useForm()
   const { loading, tableProps, paginationProps, onSearch } =
     usePaginated(goodsFindAll)
-  const [modalEditProps, openModalEdit, closeModalEdit] = useModalPrpos<
+  const [modalEditProps, openModalEdit, closeModalEdit] = useModalProps<
     CreateGoodsDto & { id?: number }
   >({
     name: '',

@@ -9,7 +9,7 @@ import {
   incomeExpensesUpdate
 } from '@/api'
 import { PageList, ZForm, ZPagination, ZTable } from '@/components'
-import { useModalPrpos, usePaginated } from '@/hooks'
+import { useModalProps, usePaginated } from '@/hooks'
 import { useMessage } from '@/provider'
 import ModalEdit from './ModalEdit'
 import { formPropsFn, tableStaticPropsFn } from './data'
@@ -21,7 +21,7 @@ const IncomeExpenses: React.FC<IProps> = () => {
   const { loading, data, tableProps, paginationProps, onSearch } = usePaginated(
     incomeExpensesFindAll
   )
-  const [modalEditProps, openModalEdit, closeModalEdit] = useModalPrpos<
+  const [modalEditProps, openModalEdit, closeModalEdit] = useModalProps<
     Omit<IncomeExpensesDto, 'id' | 'date' | 'remark'> & {
       id?: number
       date: Dayjs

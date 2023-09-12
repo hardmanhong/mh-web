@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useBoolean } from '@/hooks'
 
-function useModalPrpos<T>(
+function useModalProps<T>(
   defaultData: T
 ): [{ open: boolean; data: T }, (data?: T) => void, () => void] {
   const [open, toggle] = useBoolean()
@@ -25,4 +25,4 @@ function useModalPrpos<T>(
   return [props, onOpen, onClose]
 }
 
-export default useModalPrpos
+export default useModalProps

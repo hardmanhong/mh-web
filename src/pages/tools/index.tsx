@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs } from 'antd'
-import { Gem } from './compoments'
+import { Gem } from './components'
 import './style.less'
 import { IProps } from './types'
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from 'antd'
 import { AccountDto, accountCreate, accountFindAll, accountUpdate } from '@/api'
 import { PageList, ZTable } from '@/components'
-import { useModalPrpos, useRequest } from '@/hooks'
+import { useModalProps, useRequest } from '@/hooks'
 import { useMessage } from '@/provider'
 import ModalEdit from './ModalEdit'
 import { tableStaticPropsFn } from './data'
@@ -13,7 +13,7 @@ const Account: React.FC<IProps> = () => {
   const { loading, data, run } = useRequest(accountFindAll, {
     defaultData: []
   })
-  const [modalEditProps, openModalEdit, closeModalEdit] = useModalPrpos<
+  const [modalEditProps, openModalEdit, closeModalEdit] = useModalProps<
     Partial<AccountDto> & { userName: string }
   >({
     userName: '',
