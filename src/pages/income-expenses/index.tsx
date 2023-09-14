@@ -18,7 +18,7 @@ import { IProps } from './types'
 const IncomeExpenses: React.FC<IProps> = () => {
   const message = useMessage()
   const [form] = Form.useForm()
-  const { loading, data, tableProps, paginationProps, onSearch } = usePaginated(
+  const { data, tableProps, paginationProps, onSearch } = usePaginated(
     incomeExpensesFindAll
   )
   const [modalEditProps, openModalEdit, closeModalEdit] = useModalProps<
@@ -72,7 +72,7 @@ const IncomeExpenses: React.FC<IProps> = () => {
     }
     onSearch(params)
   }
-  const tableStaticProps = tableStaticPropsFn({ loading, onEdit, onDelete })
+  const tableStaticProps = tableStaticPropsFn({ onEdit, onDelete })
   const formProps = formPropsFn()
   return (
     <PageList

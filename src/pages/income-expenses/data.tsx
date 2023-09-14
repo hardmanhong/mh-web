@@ -1,7 +1,6 @@
 import { Popconfirm, Select, Space, Tag, Typography } from 'antd'
 import { SelectFilter } from '@/components'
-import { useTableScroll } from '@/hooks'
-import { computedScroll, formatDate } from '@/utils'
+import { formatDate } from '@/utils'
 
 export const type = [
   {
@@ -61,15 +60,12 @@ export const formPropsFn = () => {
 }
 
 export const tableStaticPropsFn = ({
-  loading,
   onEdit,
   onDelete
 }: {
-  loading: boolean
   onEdit: (record: any) => void
   onDelete: (record: any) => void
 }) => {
-  const [height] = useTableScroll(loading)
   const columns: any[] = [
     {
       title: '类型',
@@ -130,7 +126,6 @@ export const tableStaticPropsFn = ({
 
   return {
     rowKey: 'id',
-    columns,
-    scroll: computedScroll(columns, 200, height)
+    columns
   }
 }

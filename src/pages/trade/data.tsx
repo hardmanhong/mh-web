@@ -1,8 +1,7 @@
 import { DatePicker, Popconfirm, Space, Tag, Tooltip, Typography } from 'antd'
 import { SelectFilter } from '@/components'
 import RangPickerItem from '@/components/z-form/RangPickerItem'
-import { useTableScroll } from '@/hooks'
-import { computedScroll, formatDate } from '@/utils'
+import { formatDate } from '@/utils'
 
 const { RangePicker } = DatePicker
 export const formPropsFn = (goodsList: any[]) => {
@@ -46,17 +45,14 @@ export const formPropsFn = (goodsList: any[]) => {
 }
 
 export const tableStaticPropsFn = ({
-  loading,
   onEdit,
   onSell,
   onDelete
 }: {
-  loading: boolean
   onEdit: (record: any) => void
   onSell: (record: any) => void
   onDelete: (record: any) => void
 }) => {
-  const [height] = useTableScroll(loading)
   const columns: any[] = [
     {
       sorter: true,
@@ -168,7 +164,6 @@ export const tableStaticPropsFn = ({
 
   return {
     rowKey: 'id',
-    columns,
-    scroll: computedScroll(columns, 200, height)
+    columns
   }
 }

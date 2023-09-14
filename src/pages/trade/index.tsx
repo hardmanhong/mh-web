@@ -31,7 +31,7 @@ import { IProps } from './types'
 const Trade: React.FC<IProps> = () => {
   const message = useMessage()
   const [form] = Form.useForm()
-  const { loading, data, tableProps, paginationProps, onSearch } =
+  const { data, tableProps, paginationProps, onSearch } =
     usePaginated(buyFindAll)
   const {
     data: { list: goodsList = [] },
@@ -183,7 +183,6 @@ const Trade: React.FC<IProps> = () => {
     onSearch({ order })
   }
   const tableStaticProps = tableStaticPropsFn({
-    loading,
     onEdit,
     onSell,
     onDelete

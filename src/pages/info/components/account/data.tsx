@@ -1,15 +1,10 @@
 import { Space, Typography } from 'antd'
-import { useTableScroll } from '@/hooks'
-import { computedScroll } from '@/utils'
 
 export const tableStaticPropsFn = ({
-  loading,
   onEdit
 }: {
-  loading: boolean
   onEdit: (record: any) => void
 }) => {
-  const [height] = useTableScroll(loading)
   const columns: any[] = [
     {
       title: 'ID',
@@ -46,7 +41,6 @@ export const tableStaticPropsFn = ({
 
   return {
     rowKey: 'id',
-    columns,
-    scroll: computedScroll(columns, 200, height)
+    columns
   }
 }

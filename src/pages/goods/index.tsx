@@ -17,8 +17,7 @@ import { IProps } from './types'
 const Goods: React.FC<IProps> = () => {
   const message = useMessage()
   const [form] = Form.useForm()
-  const { loading, tableProps, paginationProps, onSearch } =
-    usePaginated(goodsFindAll)
+  const { tableProps, paginationProps, onSearch } = usePaginated(goodsFindAll)
   const [modalEditProps, openModalEdit, closeModalEdit] = useModalProps<
     CreateGoodsDto & { id?: number }
   >({
@@ -65,7 +64,7 @@ const Goods: React.FC<IProps> = () => {
     const params = form.getFieldsValue()
     onSearch(params)
   }
-  const tableStaticProps = tableStaticPropsFn({ loading, onEdit, onDelete })
+  const tableStaticProps = tableStaticPropsFn({ onEdit, onDelete })
   const formProps = formPropsFn()
   return (
     <PageList
